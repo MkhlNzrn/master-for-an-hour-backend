@@ -18,25 +18,25 @@ public class Master {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Column(name = "telegram_tag")
     private String telegramTag;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "age")
     private byte age;
 
-    @Column(name = "rate")
+    @Column(name = "rate", nullable = false)
     private float rate;
 
     @Column(name = "photo_link")
