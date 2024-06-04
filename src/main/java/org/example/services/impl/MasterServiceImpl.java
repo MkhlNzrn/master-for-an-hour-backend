@@ -10,8 +10,9 @@ import org.example.repositories.MasterRepository;
 import org.example.services.MasterService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class MasterServiceImpl implements MasterService {
 
     private final MasterRepository masterRepository;
