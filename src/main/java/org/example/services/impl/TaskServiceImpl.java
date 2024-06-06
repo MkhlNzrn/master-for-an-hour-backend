@@ -1,7 +1,7 @@
 package org.example.services.impl;
 
-import org.example.dtos.TaskDTO;
-import org.example.entites.Task;
+import org.example.pojo.TaskDTO;
+import org.example.entities.Task;
 import org.example.exceptions.NoTasksFoundException;
 import org.example.repositories.TaskRepository;
 import org.example.services.TaskService;

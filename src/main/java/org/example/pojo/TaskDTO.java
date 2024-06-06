@@ -1,4 +1,4 @@
-package org.example.dtos;
+package org.example.pojo;
 
 import lombok.Builder;
 import lombok.Data;
