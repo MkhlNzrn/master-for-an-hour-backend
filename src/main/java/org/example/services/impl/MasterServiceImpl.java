@@ -1,9 +1,9 @@
 package org.example.services.impl;
 
 
-import org.example.dtos.MasterDTO;
-import org.example.dtos.MasterInfoDTO;
-import org.example.entites.Master;
+import org.example.pojo.MasterDTO;
+import org.example.pojo.MasterInfoDTO;
+import org.example.entities.Master;
 import org.example.exceptions.MasterNotFoundException;
 import org.example.exceptions.NoMastersFoundException;
 import org.example.repositories.MasterRepository;

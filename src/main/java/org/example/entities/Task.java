@@ -1,4 +1,4 @@
-package org.example.entites;
+package org.example.entities;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -7,19 +7,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "documents")
+@Table(name = "tasks")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Document {
+public class Task {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    private String url;
-
     @ManyToOne
-    @JoinColumn(name = "master_id")
-    private Master master;
+    private Category category;
 }

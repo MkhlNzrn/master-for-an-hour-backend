@@ -1,9 +1,7 @@
 package org.example.controllers;
 
-import org.example.dtos.MasterDTO;
-import org.example.dtos.MasterInfoDTO;
-import org.example.dtos.TaskDTO;
-import org.example.services.MasterService;
+import io.swagger.v3.oas.annotations.Operation;
+import org.example.pojo.TaskDTO;
 import org.example.services.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +18,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    @Operation(summary = "Get an information about all Tasks")
     @GetMapping("/")
     public ResponseEntity<Page<TaskDTO>> getAllMasters(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "10") int size) {

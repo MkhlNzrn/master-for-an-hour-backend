@@ -1,6 +1,6 @@
 package org.example.repositories;
 
-import org.example.entites.Task;
+import org.example.entities.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
