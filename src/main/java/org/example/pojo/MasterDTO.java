@@ -1,16 +1,24 @@
-package org.example.dtos;
+package org.example.pojo;
 
 import lombok.Builder;
 import lombok.Data;
-import org.example.entites.Document;
+import org.example.entities.Document;
 
 import java.util.List;
 
 @Data
 @Builder
-public class MasterInfoDTO {
+public class MasterDTO {
+
+    private Long id;
 
     private String fullName;
+
+    private String email;
+
+    private String phoneNumber;
+
+    private String telegramTag;
 
     private String description;
 

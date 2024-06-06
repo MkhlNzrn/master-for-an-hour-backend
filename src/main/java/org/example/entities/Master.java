@@ -1,4 +1,4 @@
-package org.example.entites;
+package org.example.entities;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Master {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "full_name", nullable = false)
