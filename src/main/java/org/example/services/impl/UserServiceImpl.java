@@ -1,6 +1,5 @@
 package org.example.services.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.example.entities.User;
 import org.example.enums.ERole;
 import org.example.repositories.UserRepository;
@@ -10,9 +9,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl {
+
     private final UserRepository repository;
+
+    public UserServiceImpl(UserRepository repository) {
+        this.repository = repository;
+    }
 
 
     public User save(User user) {
