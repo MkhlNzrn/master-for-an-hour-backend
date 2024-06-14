@@ -8,12 +8,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.example.entities.User;
-import org.example.services.impl.JwtServiceImpl;
-import org.example.services.impl.UserServiceImpl;
+import org.example.services.JwtService;
+import org.example.services.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,8 +24,8 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
-    private final JwtServiceImpl jwtService;
-    private final UserServiceImpl userService;
+    private final JwtService jwtService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(
