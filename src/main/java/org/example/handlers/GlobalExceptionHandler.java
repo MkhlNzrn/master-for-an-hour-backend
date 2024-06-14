@@ -1,9 +1,6 @@
 package org.example.handlers;
 
-import org.example.exceptions.InvalidRoleException;
-import org.example.exceptions.MasterNotFoundException;
-import org.example.exceptions.NoMastersFoundException;
-import org.example.exceptions.NoTasksFoundException;
+import org.example.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,18 +14,63 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<?> handleTaskNotFoundException(TaskNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MasterAccessRequestNotFoundException.class)
+    public ResponseEntity<?> handleMasterAccessRequestNotFoundException(MasterAccessRequestNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(NoMastersFoundException.class)
-    public ResponseEntity<?> handleMastersNotFoundException(NoMastersFoundException ex) {
+    public ResponseEntity<?> handleNoMastersFoundException(NoMastersFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NoTasksFoundException.class)
-    public ResponseEntity<?> handleMasterNotFoundException(NoTasksFoundException ex) {
+    public ResponseEntity<?> handleNoTasksFoundException(NoTasksFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<?> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoCategoriesFoundException.class)
+    public ResponseEntity<?> handleNoCategoriesFoundException(NoCategoriesFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoMasterAccessRequestsException.class)
+    public ResponseEntity<?> handleNoMasterAccessRequestsException(NoMasterAccessRequestsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidRoleException.class)
-    public ResponseEntity<?> handleInvalidRoleException(NoTasksFoundException ex) {
+    public ResponseEntity<?> handleInvalidRoleException(InvalidRoleException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<?> handleInvalidEmailException(InvalidEmailException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserEmailAlreadyExistsException.class)
+    public ResponseEntity<?> handleUserEmailAlreadyExistsException(UserEmailAlreadyExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserUsernameAlreadyExistsException.class)
+    public ResponseEntity<?> handleUserUsernameAlreadyExistsException(UserUsernameAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
