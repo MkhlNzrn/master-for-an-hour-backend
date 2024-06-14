@@ -1,8 +1,7 @@
 package org.example.configs;
 
 import lombok.RequiredArgsConstructor;
-import org.example.services.impl.JwtServiceImpl;
-import org.example.services.impl.UserServiceImpl;
+import org.example.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +28,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,8 +42,8 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/masters/{id}").hasRole("ADMIN")
+                        .requestMatchers("/auth/**", "/masters/info/{id}", "/masters/", "/tasks/").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

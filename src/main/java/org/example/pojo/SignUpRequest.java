@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.entities.Document;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +17,7 @@ import lombok.Setter;
 @Schema(description = "Запрос на регистрацию")
 public class SignUpRequest {
 
-    @Schema(description = "Имя пользователя", example = "Jon")
+    @Schema(description = "Имя пользователя", example = "Jonson")
     @Size(min = 5, max = 50, message = "Имя пользователя должно содержать от 5 до 50 символов")
     @NotBlank(message = "Имя пользователя не может быть пустыми")
     private String username;
@@ -28,4 +31,21 @@ public class SignUpRequest {
     @Schema(description = "Пароль", example = "my_1secret1_password")
     @Size(max = 255, message = "Длина пароля должна быть не более 255 символов")
     private String password;
+
+    @NotBlank(message = "Роль не может быть пустой")
+    private String role;
+
+    private String phoneNumber;
+
+    private String telegramTag;
+
+    private String description;
+
+    private byte age;
+
+    private float rate;
+
+    private String photoLink;
+
+    private List<Document> documents;
 }
