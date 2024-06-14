@@ -2,8 +2,12 @@ package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entities.User;
-import org.example.enums.ERole;
+import org.example.exceptions.InvalidEmailException;
+import org.example.exceptions.UserEmailAlreadyExistsException;
+import org.example.exceptions.UserUsernameAlreadyExistsException;
 import org.example.repositories.UserRepository;
+import org.example.services.UserService;
+import org.example.utils.EmailValidator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
 
@@ -23,21 +27,23 @@ public class UserServiceImpl {
 
     public User create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
-            // Заменить на свои исключения
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            throw new UserUsernameAlreadyExistsException(user.getUsername());
         }
 
         if (repository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Пользователь с таким email уже существует");
+            throw new UserEmailAlreadyExistsException(user.getEmail());
         }
 
+        if (!EmailValidator.isValidEmail(user.getEmail())) {
+            throw new InvalidEmailException(user.getEmail());
+        }
         return save(user);
     }
 
 
     public User getByUsername(String username) {
         return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
     }
 
@@ -47,16 +53,8 @@ public class UserServiceImpl {
     }
 
     public User getCurrentUser() {
-        // Получение имени пользователя из контекста Spring Security
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByUsername(username);
     }
 
-
-    @Deprecated
-    public void getAdmin() {
-        var user = getCurrentUser();
-        user.setRole(ERole.ROLE_ADMIN);
-        save(user);
-    }
 }
