@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "name")
@@ -22,4 +22,9 @@ public class Task {
 
     @ManyToOne
     private Category category;
+
+    public Task(String name, Category category) {
+        this.name = name;
+        this.category = category;
+    }
 }
