@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Table(name = "masters")
 @Getter
@@ -15,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Master {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "full_name", nullable = false)
@@ -42,6 +40,18 @@ public class Master {
     @Column(name = "photo_link")
     private String photoLink;
 
-    @OneToMany(mappedBy = "master")
-    private List<Document> documents;
+    @Column(name = "user_id")
+    private Long user_id;
+
+    public Master(String fullName, String email, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, Long user_id) {
+        this.fullName = fullName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.telegramTag = telegramTag;
+        this.description = description;
+        this.age = age;
+        this.rate = rate;
+        this.photoLink = photoLink;
+        this.user_id = user_id;
+    }
 }
