@@ -12,6 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/masters")
@@ -25,13 +29,13 @@ public class MasterController {
     @GetMapping("/{id}")
     public ResponseEntity<MasterDTO> getMaster(@PathVariable Long id) {
         return ResponseEntity.ok(masterService.getMaster(id));
-    };
+    }
 
     @Operation(description = "Get an information for client about Master by ID")
     @GetMapping("/info/{id}")
     public ResponseEntity<MasterInfoDTO> getMasterInfo(@PathVariable Long id) {
         return ResponseEntity.ok(masterService.getMasterInfo(id));
-    };
+    }
 
     @Operation(description = "Get an information about all Masters")
     @GetMapping("/")
@@ -39,5 +43,11 @@ public class MasterController {
                                                          @RequestParam(defaultValue = "10") int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return ResponseEntity.ok(masterService.getAllMasters(pageRequest));
-    };
+    }
+
+    @Operation(description = "Get list of metro stations")
+    @GetMapping("/metro-stations")
+    public ResponseEntity<List<String>> getMetroStations() {
+        return ResponseEntity.ok(masterService.getMetroStations());
+    }
 }

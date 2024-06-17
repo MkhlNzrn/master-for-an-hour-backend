@@ -21,4 +21,6 @@ public interface MasterService {
     MasterInfoDTO getMasterInfo(Long id);
 
     Page<MasterDTO> getAllMasters(Pageable pageable);
+
+    List<String> getMetroStations();
 }
