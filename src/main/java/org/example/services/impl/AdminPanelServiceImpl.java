@@ -31,8 +31,10 @@ public class AdminPanelServiceImpl implements AdminPanelService {
     public void createMasterAccountRequest(SignUpRequest request) {
         MasterAccessRequest masterRequest = masterAccessRequestRepository.save(
                 new MasterAccessRequest(
+                        request.getFirstName(),
+                        request.getMiddleName(),
+                        request.getLastName(),
                         request.getUsername(),
-                        request.getEmail(),
                         request.getPassword(),
                         request.getRole(),
                         request.getPhoneNumber(),
@@ -54,8 +56,8 @@ public class AdminPanelServiceImpl implements AdminPanelService {
         MasterAccessRequest request = masterAccessRequestRepository.findById(id).orElseThrow(() -> new MasterAccessRequestNotFoundException(id));
 
         User user = User.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
+                .username(request.getEmail())
+                .firstName(request.getFirstName())
                 .password(passwordEncoder.encode(request
                         .getPassword())).role(ERole.valueOf(request.getRole()))
                 .build();

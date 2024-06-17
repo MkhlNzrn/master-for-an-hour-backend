@@ -33,7 +33,9 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public void createMaster(MasterAccessRequest request, Long userId, List<Document> documents) {
         Master master = new Master(
-                request.getUsername(),
+                request.getFirstName(),
+                request.getMiddleName(),
+                request.getLastName(),
                 request.getEmail(),
                 request.getPhoneNumber(),
                 request.getTelegramTag(),
@@ -54,7 +56,9 @@ public class MasterServiceImpl implements MasterService {
     public MasterInfoDTO getMasterInfo(Long id) {
         Master master = masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id));
         return MasterInfoDTO.builder()
-                .fullName(master.getFullName())
+                .firstName(master.getFirstName())
+                .middleName(master.getMiddleName())
+                .lastName(master.getLastName())
                 .description(master.getDescription())
                 .age(master.getAge())
                 .rate(master.getRate())
@@ -73,7 +77,9 @@ public class MasterServiceImpl implements MasterService {
     private MasterDTO convertToDTO(Master master) {
         return MasterDTO.builder()
                 .id(master.getId())
-                .fullName(master.getFullName())
+                .firstName(master.getFirstName())
+                .middleName(master.getMiddleName())
+                .lastName(master.getLastName())
                 .email(master.getEmail())
                 .phoneNumber(master.getPhoneNumber())
                 .telegramTag(master.getTelegramTag())

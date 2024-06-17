@@ -16,8 +16,14 @@ public class Master {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "middle_name", nullable = false)
+    private String middleName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -43,8 +49,10 @@ public class Master {
     @Column(name = "user_id")
     private Long user_id;
 
-    public Master(String fullName, String email, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, Long user_id) {
-        this.fullName = fullName;
+    public Master(String firstName, String middleName, String lastName, String email, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, Long user_id) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.telegramTag = telegramTag;

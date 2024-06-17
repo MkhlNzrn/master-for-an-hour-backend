@@ -15,8 +15,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void createClient(SignUpRequest signUpRequest, Long userId) {
         Client client = new Client(
+                signUpRequest.getFirstName(),
                 signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
                 signUpRequest.getPhoneNumber(),
                 signUpRequest.getTelegramTag(),
                 userId

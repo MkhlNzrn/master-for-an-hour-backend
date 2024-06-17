@@ -10,7 +10,11 @@ import java.util.List;
 @Builder
 public class MasterInfoDTO {
 
-    private String fullName;
+    private String firstName;
+
+    private String middleName;
+
+    private String lastName;
 
     private String description;
 

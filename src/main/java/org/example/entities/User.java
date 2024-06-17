@@ -25,8 +25,8 @@ public class User implements UserDetails {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Column(name = "first_name", nullable = false, unique = true)
+    private String firstName;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -37,7 +37,7 @@ public class User implements UserDetails {
     public User(String username, String email, String password, ERole role) {
         super();
         this.username = username;
-        this.email = email;
+        this.firstName = email;
         this.password = password;
         this.role = role;
     }

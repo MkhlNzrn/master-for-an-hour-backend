@@ -26,16 +26,17 @@ public class UserServiceImpl implements UserService {
 
 
     public User create(User user) {
+        if (repository.existsByFirstName(user.getUsername())) {
+            throw new UserUsernameAlreadyExistsException(user.getFirstName()
+            );
+        }
+
         if (repository.existsByUsername(user.getUsername())) {
-            throw new UserUsernameAlreadyExistsException(user.getUsername());
+            throw new UserEmailAlreadyExistsException(user.getUsername());
         }
 
-        if (repository.existsByEmail(user.getEmail())) {
-            throw new UserEmailAlreadyExistsException(user.getEmail());
-        }
-
-        if (!EmailValidator.isValidEmail(user.getEmail())) {
-            throw new InvalidEmailException(user.getEmail());
+        if (!EmailValidator.isValidEmail(user.getUsername())) {
+            throw new InvalidEmailException(user.getUsername());
         }
         return save(user);
     }
