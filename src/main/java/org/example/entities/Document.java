@@ -27,4 +27,10 @@ public class Document {
     @ManyToOne
     @JoinColumn(name = "master_access_request_id")
     private MasterAccessRequest masterAccessRequest;
+
+    public Document(String name, String url, Master master) {
+        this.name = name;
+        this.url = url;
+        this.master = master;
+    }
 }

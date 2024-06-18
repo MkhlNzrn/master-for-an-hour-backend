@@ -7,13 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
 import org.example.services.MasterService;
+import org.example.wrappers.PathSet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -49,5 +50,15 @@ public class MasterController {
     @GetMapping("/metro-stations")
     public ResponseEntity<List<String>> getMetroStations() {
         return ResponseEntity.ok(masterService.getMetroStations());
+    }
+
+    @PostMapping("/documents")
+    public ResponseEntity<PathSet<String>> uploadDocuments(@RequestParam("files") List<MultipartFile> multipartFiles, @RequestParam String username) throws IOException {
+        return ResponseEntity.ok(masterService.uploadDocument(multipartFiles, username));
+    }
+
+    @PostMapping("/photo")
+    public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam String username) throws IOException {
+        return ResponseEntity.ok(masterService.uploadPhoto(multipartFile, username));
     }
 }

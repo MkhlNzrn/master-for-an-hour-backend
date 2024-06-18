@@ -13,6 +13,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleMasterNotFoundException(MasterNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(DuplicateFileNameException.class)
+    public ResponseEntity<?> handleDuplicateFileNameException(DuplicateFileNameException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<?> handleTaskNotFoundException(TaskNotFoundException ex) {
@@ -71,6 +75,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserUsernameAlreadyExistsException.class)
     public ResponseEntity<?> handleUserUsernameAlreadyExistsException(UserUsernameAlreadyExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DocumentsCountLimitException.class)
+    public ResponseEntity<?> handleDocumentsCountLimitException(DocumentsCountLimitException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PhotoCountLimitException.class)
+    public ResponseEntity<?> handlePhotoCountLimitException(PhotoCountLimitException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface MasterRepository extends JpaRepository<Master, Long> {
     @Query(value = "select m from Master m")
     Page<Master> findAllMastersPage(Pageable pageable);
+
+    Master findByEmail(String email);
 }

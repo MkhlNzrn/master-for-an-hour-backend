@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 
 @Slf4j
 @Service
@@ -26,7 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AdminPanelService adminPanelService;
 
 
-    public JwtAuthenticationResponse signUp(SignUpRequest request) {
+    public JwtAuthenticationResponse signUp(SignUpRequest request) throws IOException {
 
         if (request.getRole().equals(ERole.ROLE_MASTER.name())) {
             adminPanelService.createMasterAccountRequest(request);

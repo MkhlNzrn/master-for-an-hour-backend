@@ -4,6 +4,8 @@ package org.example.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.entities.Document;
 import org.example.entities.MasterAccessRequest;
+import org.example.exceptions.DocumentsCountLimitException;
+import org.example.exceptions.PhotoCountLimitException;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
 import org.example.entities.Master;
@@ -12,13 +14,24 @@ import org.example.exceptions.NoMastersFoundException;
 import org.example.repositories.DocumentRepository;
 import org.example.repositories.MasterRepository;
 import org.example.services.MasterService;
+import org.example.wrappers.PathSet;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +40,13 @@ public class MasterServiceImpl implements MasterService {
     private final MasterRepository masterRepository;
 
     private final DocumentRepository documentRepository;
+
+    @Value("${media.photos.limit.count}")
+    private int PHOTO_COUNT_LIMIT;
+    @Value("${media.documents.limit.count}")
+    private int DOCUMENTS_COUNT_LIMIT;
+    @Value("${media.path}")
+    private String PATH_TO_MEDIA;
 
     private final List<String> METRO_STATIONS = new ArrayList<>(Arrays.asList("Автово", "Адмиралтейская", "Академическая",
             "Балтийская", "Бухарестская", "Василеостровская", "Владимирская", "Волковская", "Выборгская",
@@ -94,6 +114,55 @@ public class MasterServiceImpl implements MasterService {
         return METRO_STATIONS;
     }
 
+    @Override
+    public PathSet<String> uploadDocument(List<MultipartFile> multipartFiles, String username) throws IOException { //Todo: Узнать про формат и лимит документов
+        PathSet<String> paths = new PathSet<>();
+        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/documents/"));
+        int countDocuments = countFilesInDirectory(PATH_TO_MEDIA + username + "/documents/");
+        if (countDocuments+multipartFiles.toArray().length<=DOCUMENTS_COUNT_LIMIT) {
+            multipartFiles.forEach(multipartFile -> {
+                String filePath = PATH_TO_MEDIA + username + "/documents/" + multipartFile.getOriginalFilename();
+                while (Files.exists(Paths.get(filePath))) {
+                    filePath += "(1)";
+                }
+                File file = new File(filePath);
+                try {
+                    multipartFile.transferTo(file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                String email = authentication.getName();
+                if (!Objects.equals(email, "anonymousUser") && email != null)
+                    documentRepository.save(new Document(multipartFile.getOriginalFilename(), PATH_TO_MEDIA, masterRepository.findByEmail(email)));
+                paths.add(file.getAbsolutePath());
+            });
+            return paths;
+        } else {
+            throw new DocumentsCountLimitException(countDocuments, DOCUMENTS_COUNT_LIMIT);
+        }
+    }
+
+    @Override
+    public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException { //Todo: Узнать про формат и лимит фото
+        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
+        int countPhotos = countFilesInDirectory(PATH_TO_MEDIA + username + "/photo/");
+        if (countPhotos < PHOTO_COUNT_LIMIT) {
+            File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
+            multipartFile.transferTo(file);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            if (!Objects.equals(email, "anonymousUser") && email != null) {
+                Master master = masterRepository.findByEmail(email);
+                master.setPhotoLink(file.getAbsolutePath());
+                masterRepository.save(master);
+            }
+            return file.getAbsolutePath();
+        } else {
+            throw new PhotoCountLimitException(countPhotos, PHOTO_COUNT_LIMIT);
+        }
+    }
+
     private MasterDTO convertToDTO(Master master) {
         return MasterDTO.builder()
                 .id(master.getId())
@@ -109,6 +178,14 @@ public class MasterServiceImpl implements MasterService {
                 .photoLink(master.getPhotoLink())
                 .documents(documentRepository.findByMaster(master))
                 .build();
+    }
+
+    private int countFilesInDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
+        if (!directory.exists() || !directory.isDirectory()) {
+            return 0;
+        }
+        return Objects.requireNonNull(directory.listFiles()).length;
     }
 
 }

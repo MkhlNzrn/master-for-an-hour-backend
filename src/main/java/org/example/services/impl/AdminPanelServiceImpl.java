@@ -1,6 +1,7 @@
 package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.exceptions.UserEmailAlreadyExistsException;
 import org.example.entities.Document;
 import org.example.entities.MasterAccessRequest;
 import org.example.entities.User;
@@ -15,6 +16,7 @@ import org.example.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -29,6 +31,8 @@ public class AdminPanelServiceImpl implements AdminPanelService {
 
     @Override
     public void createMasterAccountRequest(SignUpRequest request) {
+        if (userService.userExists(request.getUsername()) || masterAccessRequestRepository.existsByEmail(request.getUsername()))
+            throw new UserEmailAlreadyExistsException(request.getUsername());
         MasterAccessRequest masterRequest = masterAccessRequestRepository.save(
                 new MasterAccessRequest(
                         request.getFirstName(),
@@ -47,6 +51,7 @@ public class AdminPanelServiceImpl implements AdminPanelService {
         );
         request.getDocuments().forEach(doc -> {
             doc.setMasterAccessRequest(masterRequest);
+            doc.setName(Paths.get(doc.getUrl()).getFileName().toString());
         });
         documentRepository.saveAll(request.getDocuments());
     }

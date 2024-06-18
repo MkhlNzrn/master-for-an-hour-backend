@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MasterAccessRequestRepository extends JpaRepository<MasterAccessRequest, Long> {
+    boolean existsByEmail(String username);
 }

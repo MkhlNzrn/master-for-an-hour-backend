@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
+    private final UserRepository userRepository;
 
 
     public User save(User user) {
@@ -56,6 +57,11 @@ public class UserServiceImpl implements UserService {
     public User getCurrentUser() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByUsername(username);
+    }
+
+    @Override
+    public boolean userExists(String username) {
+        return userRepository.existsByUsername(username);
     }
 
 }
