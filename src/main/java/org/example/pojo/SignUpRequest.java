@@ -1,14 +1,12 @@
 package org.example.pojo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.entities.Document;
 
 import java.util.List;
 
@@ -49,5 +47,5 @@ public class SignUpRequest {
 
     private String photoLink;
 
-    private List<Document> documents;
+    private List<DocumentDTO> documents;
 }

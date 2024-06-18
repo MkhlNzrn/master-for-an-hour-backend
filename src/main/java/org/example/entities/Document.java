@@ -33,4 +33,10 @@ public class Document {
         this.url = url;
         this.master = master;
     }
+
+    public Document(String name, String url, MasterAccessRequest masterAccessRequest) {
+        this.name = name;
+        this.url = url;
+        this.masterAccessRequest = masterAccessRequest;
+    }
 }

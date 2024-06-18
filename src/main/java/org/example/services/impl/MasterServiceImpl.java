@@ -223,11 +223,17 @@ public class MasterServiceImpl implements MasterService {
                         request.getPhotoLink()
                 )
         );
-        request.getDocuments().forEach(doc -> {
-            doc.setMasterAccessRequest(masterRequest);
-            doc.setName(Paths.get(doc.getUrl()).getFileName().toString());
+        List<Document> documents = new ArrayList<>();
+        request.getDocuments().forEach(docDTO -> {
+            documents.add(
+                    new Document(
+                            Paths.get(docDTO.getUrl()).getFileName().toString(),
+                            docDTO.getUrl(),
+                            masterRequest
+                    )
+            );
         });
-        documentRepository.saveAll(request.getDocuments());
+        documentRepository.saveAll(documents);
     }
 
     @Override
