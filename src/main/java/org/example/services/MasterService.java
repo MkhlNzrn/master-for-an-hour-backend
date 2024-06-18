@@ -5,6 +5,7 @@ import org.example.entities.Document;
 import org.example.entities.MasterAccessRequest;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
+import org.example.pojo.SignUpRequest;
 import org.example.wrappers.PathSet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,4 +31,12 @@ public interface MasterService {
     PathSet<String> uploadDocument(List<MultipartFile> files, String username) throws IOException;
 
     String uploadPhoto(MultipartFile multipartFile, String username) throws IOException;
+
+    void createMasterAccountRequest(SignUpRequest request) throws IOException;
+
+    Long acceptMasterAccessRequest(Long id);
+
+    Long discardMasterAccessRequest(Long id) throws IOException;
+
+    Long deleteMaster(String username) throws IOException;
 }

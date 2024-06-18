@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
     public User getByUsername(String username) {
         return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found by username: " + username));
 
     }
 
@@ -62,6 +62,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userExists(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public void deleteByEmail(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found by username: " + username));
+        userRepository.delete(user);
     }
 
 }

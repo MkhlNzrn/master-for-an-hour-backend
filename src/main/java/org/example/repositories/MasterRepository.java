@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface MasterRepository extends JpaRepository<Master, Long> {
     @Query(value = "select m from Master m")
     Page<Master> findAllMastersPage(Pageable pageable);
 
-    Master findByEmail(String email);
+    Optional<Master> findByEmail(String email);
 }

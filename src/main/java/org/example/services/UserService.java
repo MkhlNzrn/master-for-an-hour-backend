@@ -12,4 +12,5 @@ public interface UserService {
     UserDetailsService userDetailsService();
     User getCurrentUser();
     boolean userExists(String username);
+    void deleteByEmail(String username);
 }

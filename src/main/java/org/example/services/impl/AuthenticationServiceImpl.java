@@ -25,13 +25,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final ClientService clientService;
-    private final AdminPanelService adminPanelService;
+    private final MasterService masterService;
 
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) throws IOException {
 
         if (request.getRole().equals(ERole.ROLE_MASTER.name())) {
-            adminPanelService.createMasterAccountRequest(request);
+            masterService.createMasterAccountRequest(request);
             return new JwtAuthenticationResponse(
                     "the application for creating a master account has been accepted, the result of consideration by the administrator is expected"
             );
