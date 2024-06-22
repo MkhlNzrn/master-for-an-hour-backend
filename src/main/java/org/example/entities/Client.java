@@ -25,14 +25,15 @@ public class Client {
     @Column(name = "telegram_tag")
     private String telegramTag;
 
-    @Column(name = "user_id")
-    private Long user_id;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Client(String name, String email, String phoneNumber, String telegramTag, Long user_id) {
+    public Client(String name, String email, String phoneNumber, String telegramTag, User user) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.telegramTag = telegramTag;
-        this.user_id = user_id;
+        this.user = user;
     }
 }

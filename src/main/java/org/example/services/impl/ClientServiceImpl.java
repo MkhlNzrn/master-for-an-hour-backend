@@ -2,6 +2,7 @@ package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entities.Client;
+import org.example.entities.User;
 import org.example.pojo.SignUpRequest;
 import org.example.repositories.ClientRepository;
 import org.example.services.ClientService;
@@ -13,13 +14,13 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     @Override
-    public void createClient(SignUpRequest signUpRequest, Long userId) {
+    public void createClient(SignUpRequest signUpRequest, User user) {
         Client client = new Client(
                 signUpRequest.getFirstName(),
-                signUpRequest.getUsername(),
+                signUpRequest.getEmail(),
                 signUpRequest.getPhoneNumber(),
                 signUpRequest.getTelegramTag(),
-                userId
+                user
         );
         clientRepository.save(client);
     }
