@@ -25,6 +25,9 @@ public class Master {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "metro_station", nullable = false)
+    private String metroStation;
+
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -46,20 +49,26 @@ public class Master {
     @Column(name = "photo_link")
     private String photoLink;
 
-    @Column(name = "user_id")
-    private Long user_id;
+    @Column(name = "is_accepted")
+    private Boolean isAccepted;
 
-    public Master(String firstName, String middleName, String lastName, String email, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, Long user_id) {
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Master(String firstName, String middleName, String lastName, String email, Boolean isAccepted, String metroStation, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, User user) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.email = email;
+        this.isAccepted = isAccepted;
+        this.metroStation = metroStation;
         this.phoneNumber = phoneNumber;
         this.telegramTag = telegramTag;
         this.description = description;
         this.age = age;
         this.rate = rate;
         this.photoLink = photoLink;
-        this.user_id = user_id;
+        this.user = user;
     }
 }

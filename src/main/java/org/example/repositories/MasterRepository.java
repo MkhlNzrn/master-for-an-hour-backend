@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,4 +16,10 @@ public interface MasterRepository extends JpaRepository<Master, Long> {
     Page<Master> findAllMastersPage(Pageable pageable);
 
     Optional<Master> findByEmail(String email);
+
+    Optional<Master> findByIdAndIsAcceptedFalse(Long id);
+
+    boolean existsByEmail(String username);
+
+    List<Master> findAllByIsAcceptedFalse();
 }

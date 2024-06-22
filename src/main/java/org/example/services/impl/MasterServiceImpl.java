@@ -4,7 +4,6 @@ package org.example.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.Document;
-import org.example.entities.MasterAccessRequest;
 import org.example.entities.User;
 import org.example.enums.ERole;
 import org.example.exceptions.*;
@@ -13,7 +12,6 @@ import org.example.pojo.MasterInfoDTO;
 import org.example.entities.Master;
 import org.example.pojo.SignUpRequest;
 import org.example.repositories.DocumentRepository;
-import org.example.repositories.MasterAccessRequestRepository;
 import org.example.repositories.MasterRepository;
 import org.example.services.MasterService;
 import org.example.services.UserService;
@@ -45,11 +43,8 @@ public class MasterServiceImpl implements MasterService {
 
     private final DocumentRepository documentRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
     private final UserService userService;
 
-    private final MasterAccessRequestRepository masterAccessRequestRepository;
 
     @Value("${media.photos.limit.count}")
     private int PHOTO_COUNT_LIMIT;
@@ -74,28 +69,6 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public MasterDTO getMaster(Long id) {
         return convertToDTO(masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id)));
-    }
-
-    @Override
-    public void createMaster(MasterAccessRequest request, Long userId, List<Document> documents) {
-        Master master = new Master(
-                request.getFirstName(),
-                request.getMiddleName(),
-                request.getLastName(),
-                request.getEmail(),
-                request.getPhoneNumber(),
-                request.getTelegramTag(),
-                request.getDescription(),
-                request.getAge(),
-                request.getRate(),
-                request.getPhotoLink(),
-                userId
-        );
-        masterRepository.save(master);
-        documents.forEach(doc -> {
-            doc.setMaster(master);
-        });
-        documentRepository.saveAll(documents);
     }
 
     @Override
@@ -204,23 +177,24 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public void createMasterAccountRequest(SignUpRequest request) {
-        if (userService.userExists(request.getUsername()) || masterAccessRequestRepository.existsByEmail(request.getUsername()))
-            throw new UserEmailAlreadyExistsException(request.getUsername());
-        MasterAccessRequest masterRequest = masterAccessRequestRepository.save(
-                new MasterAccessRequest(
+    public void createMasterAccountRequest(SignUpRequest request, User user) {
+        if (masterRepository.existsByEmail(request.getEmail()))
+            throw new UserEmailAlreadyExistsException(request.getEmail());
+        Master master = masterRepository.save(
+                new Master(
                         request.getFirstName(),
                         request.getMiddleName(),
                         request.getLastName(),
-                        request.getUsername(),
-                        request.getPassword(),
-                        request.getRole(),
+                        request.getEmail(),
+                        false,
+                        request.getMetroStation(),
                         request.getPhoneNumber(),
                         request.getTelegramTag(),
                         request.getDescription(),
                         request.getAge(),
                         request.getRate(),
-                        request.getPhotoLink()
+                        request.getPhotoLink(),
+                        user
                 )
         );
         List<Document> documents = new ArrayList<>();
@@ -229,7 +203,7 @@ public class MasterServiceImpl implements MasterService {
                     new Document(
                             Paths.get(docDTO.getUrl()).getFileName().toString(),
                             docDTO.getUrl(),
-                            masterRequest
+                            master
                     )
             );
         });
@@ -238,33 +212,19 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public Long acceptMasterAccessRequest(Long id) {
-        MasterAccessRequest request = masterAccessRequestRepository.findById(id).orElseThrow(() -> new MasterAccessRequestNotFoundException(id));
-
-        User user = User.builder()
-                .username(request.getEmail())
-                .firstName(request.getFirstName())
-                .password(passwordEncoder.encode(request
-                        .getPassword())).role(ERole.valueOf(request.getRole()))
-                .build();
-
-        userService.create(user);
-        List<Document> documents = documentRepository.findByMasterAccessRequest(request);
-        createMaster(request, user.getId(), documents);
-        documents.forEach(doc -> {
-            doc.setMasterAccessRequest(null);
-        });
-        documentRepository.saveAll(documents);
-        masterAccessRequestRepository.delete(request);
+        Master master = masterRepository.findById(id).orElseThrow(() -> new MasterAccessRequestNotFoundException(id));
+        master.setIsAccepted(true);
+        masterRepository.save(master);
         return id;
     }
 
     @Override
     public Long discardMasterAccessRequest(Long id) throws IOException {
-        MasterAccessRequest masterAccessRequest = masterAccessRequestRepository.findById(id).orElseThrow(() -> new MasterAccessRequestNotFoundException(id));
-        List<Document> documents = documentRepository.findByMasterAccessRequest(masterAccessRequest);
-        deleteMediaByUsername(masterAccessRequest.getEmail());
+        Master master = masterRepository.findByIdAndIsAcceptedFalse(id).orElseThrow(() -> new MasterAccessRequestNotFoundException(id));
+        List<Document> documents = documentRepository.findByMaster(master);
+        deleteMediaByUsername(master.getEmail());
         documentRepository.deleteAll(documents);
-        masterAccessRequestRepository.delete(masterAccessRequest);
+        masterRepository.delete(master);
         return id;
     }
 

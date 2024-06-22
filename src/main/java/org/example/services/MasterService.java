@@ -2,7 +2,7 @@ package org.example.services;
 
 
 import org.example.entities.Document;
-import org.example.entities.MasterAccessRequest;
+import org.example.entities.User;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
 import org.example.pojo.SignUpRequest;
@@ -20,8 +20,6 @@ public interface MasterService {
 
     MasterDTO getMaster(Long id);
 
-    void createMaster(MasterAccessRequest request, Long userId, List<Document> documents);
-
     MasterInfoDTO getMasterInfo(Long id);
 
     Page<MasterDTO> getAllMasters(Pageable pageable);
@@ -32,7 +30,7 @@ public interface MasterService {
 
     String uploadPhoto(MultipartFile multipartFile, String username) throws IOException;
 
-    void createMasterAccountRequest(SignUpRequest request) throws IOException;
+    void createMasterAccountRequest(SignUpRequest request, User user) throws IOException;
 
     Long acceptMasterAccessRequest(Long id);
 

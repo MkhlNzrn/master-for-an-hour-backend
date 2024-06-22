@@ -4,11 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.entities.MasterAccessRequest;
+import org.example.entities.Master;
 import org.example.exceptions.NoMasterAccessRequestsException;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
-import org.example.repositories.MasterAccessRequestRepository;
+import org.example.repositories.MasterRepository;
 import org.example.services.MasterService;
 import org.example.wrappers.PathSet;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ import java.util.List;
 public class MasterController {
 
     private final MasterService masterService;
-    private final MasterAccessRequestRepository masterAccessRequestRepository;
+    private final MasterRepository masterRepository;
 
     @Operation(description = "Get a full information about Master by ID")
     @GetMapping("/{id}")
@@ -68,8 +68,8 @@ public class MasterController {
 
     @Operation(description = "Show all Master account access requests")
     @GetMapping("/access-requests")
-    public ResponseEntity<List<MasterAccessRequest>> masterAccessRequests() {
-        List<MasterAccessRequest> masterAccessRequests = masterAccessRequestRepository.findAll();
+    public ResponseEntity<List<Master>> masterAccessRequests() {
+        List<Master> masterAccessRequests = masterRepository.findAllByIsAcceptedFalse();
         if (masterAccessRequests.isEmpty()) {
             throw new NoMasterAccessRequestsException();
         }

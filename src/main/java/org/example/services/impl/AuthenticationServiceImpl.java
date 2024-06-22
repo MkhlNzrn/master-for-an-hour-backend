@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.entities.User;
 import org.example.exceptions.InvalidRoleException;
+import org.example.exceptions.UserEmailAlreadyExistsException;
 import org.example.pojo.JwtAuthenticationResponse;
 import org.example.pojo.SignInRequest;
 import org.example.pojo.SignUpRequest;
@@ -30,15 +31,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) throws IOException {
 
-        if (request.getRole().equals(ERole.ROLE_MASTER.name())) {
-            masterService.createMasterAccountRequest(request);
-            return new JwtAuthenticationResponse(
-                    "the application for creating a master account has been accepted, the result of consideration by the administrator is expected"
-            );
-        }
+        if (userService.userExists(request.getEmail())) throw new UserEmailAlreadyExistsException(request.getEmail());
 
         User user = User.builder()
-                .username(request.getUsername())
+                .username(request.getEmail())
                 .firstName(request.getFirstName())
                 .password(passwordEncoder.encode(request
                         .getPassword())).role(ERole.valueOf(request.getRole()))
@@ -47,7 +43,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userService.create(user);
 
         if (request.getRole().equals(ERole.ROLE_CLIENT.name())) {
-            clientService.createClient(request, user.getId());
+            clientService.createClient(request, user);
+        } else if (request.getRole().equals(ERole.ROLE_MASTER.name())) {
+            masterService.createMasterAccountRequest(request, user);
         } else {
             throw new InvalidRoleException(request.getRole());
         }
@@ -61,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             UserDetails user = userService
                     .userDetailsService()
-                    .loadUserByUsername(request.getUsername());
+                    .loadUserByUsername(request.getEmail());
 
             var jwt = jwtService.generateToken(user);
             return new JwtAuthenticationResponse(jwt);
