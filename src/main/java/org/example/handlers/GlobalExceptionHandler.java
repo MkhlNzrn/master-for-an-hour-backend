@@ -13,6 +13,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleMasterNotFoundException(MasterNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<?> handleClientNotFoundException(ClientNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(DuplicateFileNameException.class)
     public ResponseEntity<?> handleDuplicateFileNameException(DuplicateFileNameException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);

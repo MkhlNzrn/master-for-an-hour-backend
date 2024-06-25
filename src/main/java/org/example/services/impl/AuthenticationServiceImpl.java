@@ -42,15 +42,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         userService.create(user);
 
+        Long entityId;
         if (request.getRole().equals(ERole.ROLE_CLIENT.name())) {
-            clientService.createClient(request, user);
+            entityId = clientService.createClient(request, user);
         } else if (request.getRole().equals(ERole.ROLE_MASTER.name())) {
-            masterService.createMasterAccountRequest(request, user);
+            entityId = masterService.createMasterAccountRequest(request, user);
         } else {
             throw new InvalidRoleException(request.getRole());
         }
 
-        var jwt = jwtService.generateToken(user);
+        var jwt = jwtService.generateToken(user, entityId);
         return new JwtAuthenticationResponse(jwt);
     }
 
@@ -60,8 +61,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             UserDetails user = userService
                     .userDetailsService()
                     .loadUserByUsername(request.getEmail());
-
-            var jwt = jwtService.generateToken(user);
+            Long entityId = null;
+            if (user instanceof User customUserDetails) {
+                if (customUserDetails.getRole() == ERole.ROLE_CLIENT) {
+                    entityId = clientService.getClientByUserUsername(user.getUsername());
+                } else if (customUserDetails.getRole().equals(ERole.ROLE_MASTER)) {
+                    entityId = masterService.getMasterByUserUsername(user.getUsername());
+                }
+            }
+            var jwt = jwtService.generateToken(user, entityId);
             return new JwtAuthenticationResponse(jwt);
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Bad credentials");

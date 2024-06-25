@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.Document;
 import org.example.entities.User;
-import org.example.enums.ERole;
 import org.example.exceptions.*;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -177,7 +175,7 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public void createMasterAccountRequest(SignUpRequest request, User user) {
+    public Long createMasterAccountRequest(SignUpRequest request, User user) {
         if (masterRepository.existsByEmail(request.getEmail()))
             throw new UserEmailAlreadyExistsException(request.getEmail());
         Master master = masterRepository.save(
@@ -208,6 +206,7 @@ public class MasterServiceImpl implements MasterService {
             );
         });
         documentRepository.saveAll(documents);
+        return master.getId();
     }
 
     @Override
@@ -238,6 +237,11 @@ public class MasterServiceImpl implements MasterService {
         masterRepository.delete(master);
         userService.deleteByEmail(username);
         return id;
+    }
+
+    @Override
+    public Long getMasterByUserUsername(String username) {
+        return masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username)).getId();
     }
 
     private void deleteMediaByUsername(String username) throws IOException {

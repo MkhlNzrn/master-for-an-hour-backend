@@ -3,6 +3,7 @@ package org.example.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.entities.Client;
 import org.example.entities.User;
+import org.example.exceptions.ClientNotFoundException;
 import org.example.pojo.SignUpRequest;
 import org.example.repositories.ClientRepository;
 import org.example.services.ClientService;
@@ -14,7 +15,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     @Override
-    public void createClient(SignUpRequest signUpRequest, User user) {
+    public Long createClient(SignUpRequest signUpRequest, User user) {
         Client client = new Client(
                 signUpRequest.getFirstName(),
                 signUpRequest.getEmail(),
@@ -22,6 +23,11 @@ public class ClientServiceImpl implements ClientService {
                 signUpRequest.getTelegramTag(),
                 user
         );
-        clientRepository.save(client);
+        return clientRepository.save(client).getId();
+    }
+
+    @Override
+    public Long getClientByUserUsername(String username) {
+        return clientRepository.findByEmail(username).orElseThrow(() -> new ClientNotFoundException(username)).getId();
     }
 }

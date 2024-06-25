@@ -1,7 +1,6 @@
 package org.example.services;
 
 
-import org.example.entities.Document;
 import org.example.entities.User;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
@@ -30,11 +29,13 @@ public interface MasterService {
 
     String uploadPhoto(MultipartFile multipartFile, String username) throws IOException;
 
-    void createMasterAccountRequest(SignUpRequest request, User user) throws IOException;
+    Long createMasterAccountRequest(SignUpRequest request, User user) throws IOException;
 
     Long acceptMasterAccessRequest(Long id);
 
     Long discardMasterAccessRequest(Long id) throws IOException;
 
     Long deleteMaster(String username) throws IOException;
+
+    Long getMasterByUserUsername(String username);
 }

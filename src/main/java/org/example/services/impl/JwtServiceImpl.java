@@ -30,12 +30,13 @@ public class JwtServiceImpl implements JwtService {
     }
 
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, Long entityId) {
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof User customUserDetails) {
             claims.put("id", customUserDetails.getId());
             claims.put("email", customUserDetails.getUsername());
             claims.put("role", customUserDetails.getRole());
+            claims.put("entity_id", entityId);
         }
         return generateToken(claims, userDetails);
     }
