@@ -9,9 +9,11 @@ import org.example.pojo.JwtAuthenticationResponse;
 import org.example.pojo.SignInRequest;
 import org.example.pojo.SignUpRequest;
 import org.example.enums.ERole;
+import org.example.repositories.UserRepository;
 import org.example.services.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final ClientService clientService;
     private final MasterService masterService;
+    private final UserRepository userRepository;
 
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) throws IOException {
@@ -58,19 +61,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public JwtAuthenticationResponse signIn(SignInRequest request) {
         try {
-            UserDetails user = userService
+            User user = userRepository.findByUsername(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not fount by username: " + request.getEmail()));
+            if (user.getPassword().equals(passwordEncoder.encode(request.getPassword()))) {
+            UserDetails userDetails = userService
                     .userDetailsService()
                     .loadUserByUsername(request.getEmail());
-            Long entityId = null;
-            if (user instanceof User customUserDetails) {
-                if (customUserDetails.getRole() == ERole.ROLE_CLIENT) {
-                    entityId = clientService.getClientByUserUsername(user.getUsername());
-                } else if (customUserDetails.getRole().equals(ERole.ROLE_MASTER)) {
-                    entityId = masterService.getMasterByUserUsername(user.getUsername());
+
+                Long entityId = null;
+                if (userDetails instanceof User customUserDetails) {
+                    if (customUserDetails.getRole() == ERole.ROLE_CLIENT) {
+                        entityId = clientService.getClientByUserUsername(userDetails.getUsername());
+                    } else if (customUserDetails.getRole().equals(ERole.ROLE_MASTER)) {
+                        entityId = masterService.getMasterByUserUsername(userDetails.getUsername());
+                    }
                 }
+                var jwt = jwtService.generateToken(userDetails, entityId);
+                return new JwtAuthenticationResponse(jwt);
+            } else {
+                throw new BadCredentialsException("Bad credentials");
             }
-            var jwt = jwtService.generateToken(user, entityId);
-            return new JwtAuthenticationResponse(jwt);
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Bad credentials");
         }
