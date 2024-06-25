@@ -73,9 +73,11 @@ public class MasterServiceImpl implements MasterService {
     public MasterInfoDTO getMasterInfo(Long id) {
         Master master = masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id));
         return MasterInfoDTO.builder()
+                .id(master.getId())
                 .firstName(master.getFirstName())
                 .middleName(master.getMiddleName())
                 .lastName(master.getLastName())
+                .metroStation(master.getMetroStation())
                 .description(master.getDescription())
                 .age(master.getAge())
                 .rate(master.getRate())
@@ -155,6 +157,7 @@ public class MasterServiceImpl implements MasterService {
                 .firstName(master.getFirstName())
                 .middleName(master.getMiddleName())
                 .lastName(master.getLastName())
+                .metroStation(master.getMetroStation())
                 .email(master.getEmail())
                 .phoneNumber(master.getPhoneNumber())
                 .telegramTag(master.getTelegramTag())
@@ -162,7 +165,9 @@ public class MasterServiceImpl implements MasterService {
                 .age(master.getAge())
                 .rate(master.getRate())
                 .photoLink(master.getPhotoLink())
+                .isAccepted(master.getIsAccepted())
                 .documents(documentRepository.findByMaster(master))
+                .userId(master.getUser().getId())
                 .build();
     }
 

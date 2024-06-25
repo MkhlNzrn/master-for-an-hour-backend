@@ -18,6 +18,8 @@ public class MasterDTO {
 
     private String lastName;
 
+    private String metroStation;
+
     private String email;
 
     private String phoneNumber;
@@ -32,5 +34,9 @@ public class MasterDTO {
 
     private String photoLink;
 
+    private Boolean isAccepted;
+
     private List<Document> documents;
+
+    private Long userId;
 }

@@ -10,11 +10,15 @@ import java.util.List;
 @Builder
 public class MasterInfoDTO {
 
+    private Long id;
+
     private String firstName;
 
     private String middleName;
 
     private String lastName;
+
+    private String metroStation;
 
     private String description;
 
@@ -25,4 +29,5 @@ public class MasterInfoDTO {
     private String photoLink;
 
     private List<Document> documents;
+
 }
