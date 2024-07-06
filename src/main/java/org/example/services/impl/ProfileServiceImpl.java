@@ -55,6 +55,7 @@ public class ProfileServiceImpl implements ProfileService {
             return ProfileDTO.builder()
                     .role("ROLE_CLIENT")
                     .id(client.getId())
+                    .firstName(client.getName())
                     .email(client.getEmail())
                     .phoneNumber(client.getPhoneNumber())
                     .telegramTag(client.getTelegramTag())
