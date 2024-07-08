@@ -2,6 +2,7 @@ package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entities.Category;
+import org.example.entities.User;
 import org.example.exceptions.CategoryNotFoundException;
 import org.example.exceptions.TaskNotFoundException;
 import org.example.pojo.CreateTaskDTO;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,9 +72,12 @@ public class TaskServiceImpl implements TaskService {
                     .orElseGet(() -> new Category(taskDTO.getCategoryName()));
             task.setCategory(category);
         }
-        if (!taskDTO.getDescription().isEmpty() && !taskDTO.getDescription().equals(task.getDescription())) task.setDescription(taskDTO.getDescription());
-        if (!taskDTO.getStartDate().toString().isEmpty() && !taskDTO.getStartDate().equals(task.getStartDate())) task.setStartDate(taskDTO.getStartDate());
-        if (!taskDTO.getEndDate().toString().isEmpty() && !taskDTO.getEndDate().equals(task.getEndDate())) task.setEndDate(taskDTO.getEndDate());
+        if (!taskDTO.getDescription().isEmpty() && !taskDTO.getDescription().equals(task.getDescription()))
+            task.setDescription(taskDTO.getDescription());
+        if (!taskDTO.getStartDate().toString().isEmpty() && !taskDTO.getStartDate().equals(task.getStartDate()))
+            task.setStartDate(taskDTO.getStartDate());
+        if (!taskDTO.getEndDate().toString().isEmpty() && !taskDTO.getEndDate().equals(task.getEndDate()))
+            task.setEndDate(taskDTO.getEndDate());
         taskRepository.save(task);
         return task.getId();
     }
@@ -80,7 +85,17 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDTO> getTasksByCategoryId(Long id) {
         List<Task> tasks = taskRepository.findAllByCategory(categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id)));
-        return tasks.stream().map(this::convertToDTO).toList();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(this::convertToDTO)
+                .toList();
+
+        taskDTOs.forEach(taskDTO -> {
+            User user = userRepository.findById(taskDTO.getUserId())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + taskDTO.getUserId()));
+            taskDTO.setUserName(user.getFirstName());
+        });
+
+        return taskDTOs;
     }
 
     private TaskDTO convertToDTO(Task task) {

@@ -24,4 +24,6 @@ public class TaskDTO {
     private String categoryName;
 
     private Long userId;
+
+    private String userName;
 }
