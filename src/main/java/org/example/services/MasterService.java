@@ -1,6 +1,7 @@
 package org.example.services;
 
 
+import io.github.classgraph.Resource;
 import org.example.entities.User;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
@@ -11,7 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @Service
@@ -38,4 +42,6 @@ public interface MasterService {
     Long deleteMaster(String username) throws IOException;
 
     Long getMasterByUserUsername(String username);
+
+    InputStream getPhoto(Long id) throws MalformedURLException, FileNotFoundException;
 }

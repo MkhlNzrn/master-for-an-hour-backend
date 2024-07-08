@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import io.github.classgraph.Resource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -8,13 +9,17 @@ import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
 import org.example.services.MasterService;
 import org.example.wrappers.PathSet;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @Slf4j
@@ -62,6 +67,12 @@ public class MasterController {
         return ResponseEntity.ok(masterService.uploadPhoto(multipartFile, username));
     }
 
+    @PostMapping("/{id}/photo")
+    public ResponseEntity<InputStreamResource> getPhoto(@PathVariable Long id) throws MalformedURLException, FileNotFoundException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("image/jpeg"))
+                .body(new InputStreamResource(masterService.getPhoto(id)));
+    }
 
     @Operation(description = "Delete Master")
     @DeleteMapping("/")
