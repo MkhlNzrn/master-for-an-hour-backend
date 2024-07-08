@@ -43,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
         Optional<Category> categoryOp = categoryRepository.findByName(taskDTO.getCategoryName());
         Category category = categoryOp.orElseGet(() -> new Category(taskDTO.getCategoryName()));
         categoryRepository.save(category);
-        Task task = new Task(taskDTO.getName(), category);
+        Task task = new Task(taskDTO.getDescription(), category, taskDTO.getStartDate(), taskDTO.getEndDate());
         return taskRepository.save(task).getId();
     }
 
@@ -61,7 +61,9 @@ public class TaskServiceImpl implements TaskService {
                     .orElseGet(() -> new Category(taskDTO.getCategoryName()));
             task.setCategory(category);
         }
-        if (!taskDTO.getName().isEmpty() && !taskDTO.getName().equals(task.getName())) task.setName(taskDTO.getName());
+        if (!taskDTO.getDescription().isEmpty() && !taskDTO.getDescription().equals(task.getDescription())) task.setDescription(taskDTO.getDescription());
+        if (!taskDTO.getStartDate().toString().isEmpty() && !taskDTO.getStartDate().equals(task.getStartDate())) task.setStartDate(taskDTO.getStartDate());
+        if (!taskDTO.getEndDate().toString().isEmpty() && !taskDTO.getEndDate().equals(task.getEndDate())) task.setEndDate(taskDTO.getEndDate());
         taskRepository.save(task);
         return task.getId();
     }
@@ -69,7 +71,9 @@ public class TaskServiceImpl implements TaskService {
     private TaskDTO convertToDTO(Task task) {
         return TaskDTO.builder()
                 .id(task.getId())
-                .name(task.getName())
+                .description(task.getDescription())
+                .startDate(task.getStartDate())
+                .endDate(task.getEndDate())
                 .categoryId(task.getCategory().getId())
                 .categoryName(task.getCategory().getName())
                 .build();

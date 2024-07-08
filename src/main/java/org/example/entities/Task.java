@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "tasks")
 @Getter
@@ -17,14 +19,22 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "start_date")
+    private Date startDate;
+
+    @Column(name = "end_date")
+    private Date endDate;
 
     @ManyToOne
     private Category category;
 
-    public Task(String name, Category category) {
-        this.name = name;
+    public Task(String description, Category category, Date startDate, Date endDate) {
+        this.description = description;
         this.category = category;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

@@ -60,7 +60,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     public JwtAuthenticationResponse signIn(SignInRequest request) {
-        try {
             User user = userRepository.findByUsername(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not fount by username: " + request.getEmail()));
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             UserDetails userDetails = userService
@@ -80,8 +79,5 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             } else {
                 throw new BadCredentialsException("Bad credentials");
             }
-        } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Bad credentials");
-        }
     }
 }
