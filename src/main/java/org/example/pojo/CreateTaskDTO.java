@@ -16,4 +16,6 @@ public class CreateTaskDTO {
     private Date endDate;
 
     private String categoryName;
+
+    private Long userId;
 }

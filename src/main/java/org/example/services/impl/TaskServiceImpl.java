@@ -11,9 +11,11 @@ import org.example.exceptions.NoTasksFoundException;
 import org.example.pojo.UpdateTaskDTO;
 import org.example.repositories.CategoryRepository;
 import org.example.repositories.TaskRepository;
+import org.example.repositories.UserRepository;
 import org.example.services.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
 
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Page<TaskDTO> getTasks(Pageable pageable) {
@@ -45,7 +48,11 @@ public class TaskServiceImpl implements TaskService {
         Optional<Category> categoryOp = categoryRepository.findByName(taskDTO.getCategoryName());
         Category category = categoryOp.orElseGet(() -> new Category(taskDTO.getCategoryName()));
         categoryRepository.save(category);
-        Task task = new Task(taskDTO.getDescription(), category, taskDTO.getStartDate(), taskDTO.getEndDate());
+        Task task = new Task(taskDTO.getDescription(),
+                category, taskDTO.getStartDate(),
+                taskDTO.getEndDate(),
+                userRepository.findById(taskDTO.getUserId())
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found by ID: " + taskDTO.getUserId())));
         return taskRepository.save(task).getId();
     }
 
@@ -84,6 +91,7 @@ public class TaskServiceImpl implements TaskService {
                 .endDate(task.getEndDate())
                 .categoryId(task.getCategory().getId())
                 .categoryName(task.getCategory().getName())
+                .userId(task.getUser().getId())
                 .build();
     }
 }

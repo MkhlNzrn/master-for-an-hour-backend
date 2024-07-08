@@ -29,12 +29,16 @@ public class Task {
     private Date endDate;
 
     @ManyToOne
+    private User user;
+
+    @ManyToOne
     private Category category;
 
-    public Task(String description, Category category, Date startDate, Date endDate) {
+    public Task(String description, Category category, Date startDate, Date endDate, User user) {
         this.description = description;
         this.category = category;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.user = user;
     }
 }
