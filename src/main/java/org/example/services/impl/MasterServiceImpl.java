@@ -1,7 +1,6 @@
 package org.example.services.impl;
 
 
-import io.github.classgraph.Resource;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.Document;
@@ -17,7 +16,6 @@ import org.example.services.MasterService;
 import org.example.services.UserService;
 import org.example.wrappers.PathSet;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -26,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -134,6 +131,7 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
+        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
         File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

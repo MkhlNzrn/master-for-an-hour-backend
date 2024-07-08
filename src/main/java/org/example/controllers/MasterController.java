@@ -67,7 +67,7 @@ public class MasterController {
         return ResponseEntity.ok(masterService.uploadPhoto(multipartFile, username));
     }
 
-    @PostMapping("/{id}/photo")
+    @GetMapping("/{id}/photo")
     public ResponseEntity<InputStreamResource> getPhoto(@PathVariable Long id) throws MalformedURLException, FileNotFoundException {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("image/jpeg"))
