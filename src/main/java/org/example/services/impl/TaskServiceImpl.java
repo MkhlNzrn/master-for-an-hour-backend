@@ -2,6 +2,7 @@ package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entities.Category;
+import org.example.exceptions.CategoryNotFoundException;
 import org.example.exceptions.TaskNotFoundException;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,6 +68,12 @@ public class TaskServiceImpl implements TaskService {
         if (!taskDTO.getEndDate().toString().isEmpty() && !taskDTO.getEndDate().equals(task.getEndDate())) task.setEndDate(taskDTO.getEndDate());
         taskRepository.save(task);
         return task.getId();
+    }
+
+    @Override
+    public List<TaskDTO> getTasksByCategoryId(Long id) {
+        List<Task> tasks = taskRepository.findAllByCategory(categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id)));
+        return tasks.stream().map(this::convertToDTO).toList();
     }
 
     private TaskDTO convertToDTO(Task task) {

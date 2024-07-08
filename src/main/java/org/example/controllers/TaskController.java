@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
@@ -32,6 +34,12 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTask(id));
+    }
+
+    @Operation(description = "Search tasks by category")
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<TaskDTO>> getTasksByCategoryId(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.getTasksByCategoryId(id));
     }
 
     @Operation(description = "Create new Task")
