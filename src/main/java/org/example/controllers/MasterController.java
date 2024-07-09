@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.pojo.BidDTO;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
 import org.example.services.MasterService;
@@ -76,6 +77,11 @@ public class MasterController {
     @PostMapping("/photo")
     public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam String username) throws IOException {
         return ResponseEntity.ok(masterService.uploadPhoto(multipartFile, username));
+    }
+
+    @PostMapping("/bid")
+    public ResponseEntity<Long> toBid(@RequestBody BidDTO bidDTO) throws IOException {
+        return ResponseEntity.ok(masterService.toBid(bidDTO));
     }
 
     @GetMapping("/{id}/photo")

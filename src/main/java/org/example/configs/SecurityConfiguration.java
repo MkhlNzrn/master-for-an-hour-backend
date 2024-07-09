@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/**", "/masters/info/{id}", "/masters/", "/masters/documents", "/masters/photo",
                                 "/masters/metro-stations","/tasks/", "/categories", "/masters/{id}/photo", "/tasks/category/{id}", "/masters/email").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/masters/bid").hasRole("MASTER")
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

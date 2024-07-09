@@ -2,6 +2,7 @@ package org.example.services;
 
 
 import org.example.entities.User;
+import org.example.pojo.BidDTO;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
 import org.example.pojo.SignUpRequest;
@@ -47,4 +48,6 @@ public interface MasterService {
     InputStream getPhoto(Long id) throws MalformedURLException, FileNotFoundException;
 
     void validateEmail(String email, Long pin);
+
+    Long toBid(BidDTO bidDTO);
 }

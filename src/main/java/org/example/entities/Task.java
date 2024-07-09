@@ -32,6 +32,9 @@ public class Task {
     private User user;
 
     @ManyToOne
+    private Master master;
+
+    @ManyToOne
     private Category category;
 
     public Task(String description, Category category, Date startDate, Date endDate, User user) {

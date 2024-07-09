@@ -3,18 +3,13 @@ package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.example.entities.Document;
-import org.example.entities.EmailPin;
-import org.example.entities.User;
+import org.example.entities.*;
 import org.example.exceptions.*;
+import org.example.pojo.BidDTO;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
-import org.example.entities.Master;
 import org.example.pojo.SignUpRequest;
-import org.example.repositories.DocumentRepository;
-import org.example.repositories.EmailsPinsRepository;
-import org.example.repositories.MasterRepository;
-import org.example.repositories.UserRepository;
+import org.example.repositories.*;
 import org.example.services.EmailService;
 import org.example.services.MasterService;
 import org.example.services.UserService;
@@ -22,9 +17,9 @@ import org.example.wrappers.PathSet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +42,8 @@ public class MasterServiceImpl implements MasterService {
     private final EmailService emailService;
     private final EmailsPinsRepository emailsPinsRepository;
     private final UserRepository userRepository;
+    private final BidRepository bidRepository;
+    private final TaskRepository taskRepository;
 
     @Value("${media.documents.limit.count}")
     private int DOCUMENTS_COUNT_LIMIT;
@@ -258,7 +255,9 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public Long getMasterByUserUsername(String username) {
-        return masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username)).getId();
+        Master master = masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username));
+        if (!master.getIsAccepted()) throw new MasterAccountNotAcceptedException(master.getId());
+        return master.getId();
     }
 
     @Override
@@ -275,6 +274,18 @@ public class MasterServiceImpl implements MasterService {
             emailsPinsRepository.delete(emailPin);
         }
         else throw new InvalidPinException(pin);
+    }
+
+    @Override
+    public Long toBid(BidDTO bidDTO) {
+        User user = userRepository.findById(bidDTO.getUserId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found by id: " + bidDTO.getUserId()));
+        Master master = masterRepository.findByUser(user)
+                .orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
+        Task task = taskRepository.findById(bidDTO.getTaskId())
+                .orElseThrow(() -> new TaskNotFoundException(bidDTO.getTaskId()));
+        if (bidRepository.existsByMasterAndTask(master,task)) throw new BidAlreadyExistsException(bidDTO.getUserId(), bidDTO.getTaskId());
+        return bidRepository.save(new Bid(bidDTO.getDateStart(), bidDTO.getDateEnd(), bidDTO.getPrice(), task, master)).getId();
     }
 
     private void deleteMediaByUsername(String username) throws IOException {

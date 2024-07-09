@@ -1,6 +1,7 @@
 package org.example.repositories;
 
 import org.example.entities.Master;
+import org.example.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,6 @@ public interface MasterRepository extends JpaRepository<Master, Long> {
     boolean existsByEmail(String username);
 
     List<Master> findAllByIsAcceptedFalse();
+
+    Optional<Master> findByUser(User user);
 }
