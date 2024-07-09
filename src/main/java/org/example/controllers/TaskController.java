@@ -36,10 +36,16 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTask(id));
     }
 
-    @Operation(description = "Search tasks by category")
+    @Operation(description = "Search tasks by Category")
     @GetMapping("/category/{id}")
     public ResponseEntity<List<TaskDTO>> getTasksByCategoryId(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTasksByCategoryId(id));
+    }
+
+    @Operation(description = "Search tasks by User")
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<TaskDTO>> getTasksByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.getTasksByUserId(id));
     }
 
     @Operation(description = "Create new Task")

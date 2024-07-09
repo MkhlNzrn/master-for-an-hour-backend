@@ -1,6 +1,5 @@
 package org.example.controllers;
 
-import io.github.classgraph.Resource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +59,18 @@ public class MasterController {
     @PostMapping("/documents")
     public ResponseEntity<PathSet<String>> uploadDocuments(@RequestParam("files") List<MultipartFile> multipartFiles, @RequestParam String username) throws IOException {
         return ResponseEntity.ok(masterService.uploadDocument(multipartFiles, username));
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity<String> sendValidationMsgToEmail(@RequestParam String email) {
+        masterService.sendValidationMsgToEmail(email);
+        return ResponseEntity.ok(email);
+    }
+
+    @DeleteMapping("/email")
+    public ResponseEntity<String> validateEmail(@RequestParam String email, @RequestParam Long pin) {
+        masterService.validateEmail(email, pin);
+        return ResponseEntity.ok(email);
     }
 
     @PostMapping("/photo")

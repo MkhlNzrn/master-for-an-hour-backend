@@ -1,7 +1,6 @@
 package org.example.services;
 
 
-import io.github.classgraph.Resource;
 import org.example.entities.User;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
@@ -43,5 +42,9 @@ public interface MasterService {
 
     Long getMasterByUserUsername(String username);
 
+    void sendValidationMsgToEmail(String email);
+
     InputStream getPhoto(Long id) throws MalformedURLException, FileNotFoundException;
+
+    void validateEmail(String email, Long pin);
 }

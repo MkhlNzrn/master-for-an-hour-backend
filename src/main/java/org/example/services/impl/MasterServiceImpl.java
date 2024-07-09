@@ -4,6 +4,7 @@ package org.example.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.Document;
+import org.example.entities.EmailPin;
 import org.example.entities.User;
 import org.example.exceptions.*;
 import org.example.pojo.MasterDTO;
@@ -11,13 +12,17 @@ import org.example.pojo.MasterInfoDTO;
 import org.example.entities.Master;
 import org.example.pojo.SignUpRequest;
 import org.example.repositories.DocumentRepository;
+import org.example.repositories.EmailsPinsRepository;
 import org.example.repositories.MasterRepository;
+import org.example.repositories.UserRepository;
+import org.example.services.EmailService;
 import org.example.services.MasterService;
 import org.example.services.UserService;
 import org.example.wrappers.PathSet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,10 +32,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -42,6 +44,9 @@ public class MasterServiceImpl implements MasterService {
     private final DocumentRepository documentRepository;
 
     private final UserService userService;
+    private final EmailService emailService;
+    private final EmailsPinsRepository emailsPinsRepository;
+    private final UserRepository userRepository;
 
     @Value("${media.documents.limit.count}")
     private int DOCUMENTS_COUNT_LIMIT;
@@ -127,6 +132,16 @@ public class MasterServiceImpl implements MasterService {
         } else {
             throw new DocumentsCountLimitException(countDocuments, DOCUMENTS_COUNT_LIMIT);
         }
+    }
+
+    @Override
+    public void sendValidationMsgToEmail(String email) {
+        Random random = new Random();
+        int randomNumber = random.nextInt(9000) + 1000;
+        emailService.sendSimpleEmail(email, "Подтверждение почты", "Для подтверждения почты введите пин код: " + randomNumber);
+        Optional<EmailPin> emailPin = emailsPinsRepository.findByEmail(email);
+        if (emailPin.isEmpty()) emailsPinsRepository.save(new EmailPin(email, randomNumber));
+        else emailsPinsRepository.save(emailPin.get().setPin(randomNumber));
     }
 
     @Override
@@ -251,6 +266,15 @@ public class MasterServiceImpl implements MasterService {
         Master master = masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id));
         File file = new File(master.getPhotoLink());
         return new FileInputStream(file);
+    }
+
+    @Override
+    public void validateEmail(String email, Long pin) {
+        EmailPin emailPin = emailsPinsRepository.findByEmail(email).orElseThrow(() -> new EmailPinNotFoundException(email));
+        if (emailPin.getPin() == pin) {
+            emailsPinsRepository.delete(emailPin);
+        }
+        else throw new InvalidPinException(pin);
     }
 
     private void deleteMediaByUsername(String username) throws IOException {

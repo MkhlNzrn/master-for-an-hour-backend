@@ -98,6 +98,18 @@ public class TaskServiceImpl implements TaskService {
         return taskDTOs;
     }
 
+    @Override
+    public List<TaskDTO> getTasksByUserId(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
+        List<Task> tasks = taskRepository.findAllByUser(user);
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(this::convertToDTO)
+                .toList();
+
+        taskDTOs.forEach(taskDTO -> taskDTO.setUserName(user.getFirstName()));
+        return taskDTOs;
+    }
+
     private TaskDTO convertToDTO(Task task) {
         return TaskDTO.builder()
                 .id(task.getId())
