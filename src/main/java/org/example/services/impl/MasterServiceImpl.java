@@ -32,7 +32,8 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class MasterServiceImpl implements MasterService {
+public class
+MasterServiceImpl implements MasterService {
 
     private final MasterRepository masterRepository;
 

@@ -32,7 +32,7 @@ public class MasterController {
     private final MasterService masterService;
 
     @Operation(description = "Get a full information about Master by ID")
-    @GetMapping("/{id}")
+    @GetMapping("/full/{id}")
     public ResponseEntity<MasterDTO> getMaster(@PathVariable Long id) {
         return ResponseEntity.ok(masterService.getMaster(id));
     }
@@ -80,7 +80,7 @@ public class MasterController {
     }
 
     @PostMapping("/bid")
-    public ResponseEntity<Long> toBid(@RequestBody BidDTO bidDTO) throws IOException {
+    public ResponseEntity<Long> toBid(@RequestBody BidDTO bidDTO) {
         return ResponseEntity.ok(masterService.toBid(bidDTO));
     }
 

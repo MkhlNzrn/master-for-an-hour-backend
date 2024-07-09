@@ -42,12 +42,18 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**", "/masters/info/{id}", "/masters/", "/masters/documents", "/masters/photo",
-                                "/masters/metro-stations","/tasks/", "/categories", "/masters/{id}/photo", "/tasks/category/{id}", "/masters/email", "/").permitAll()
+                        .requestMatchers(
+                                "/admin/access-requests", "/admin/accept/{id}", "/admin/verify/{id}", "/admin/discard/{id}", "/categories/{id}", "/categories/{id}", "/categories/",
+                                "/clients/bid/{id}", "/clients/bids/task/{id}",
+                                "/masters/",
+                                "/masters/documents", "/masters/photo", "/masters/{id}/photo",
+                                "/profiles/{id}",
+                                "/tasks/{id}", "/tasks/user/{id}").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/masters/bid").hasRole("MASTER")
+                        .requestMatchers("/tasks/").hasRole("CLIENT")
+                        .requestMatchers("/masters/bid", "/masters/full/{id}").hasRole("MASTER")
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
