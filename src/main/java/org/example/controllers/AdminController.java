@@ -39,6 +39,12 @@ public class AdminController {
         return ResponseEntity.ok(masterService.acceptMasterAccessRequest(id));
     }
 
+    @Operation(description = "Accept Master account access request by Id")
+    @PostMapping("/verify/{id}")
+    public ResponseEntity<Long> verifyDocks(@PathVariable Long id) {
+        return ResponseEntity.ok(masterService.verifyDocks(id));
+    }
+
     @Operation(description = "Discard Master account access request by Id")
     @DeleteMapping("/discard/{id}")
     public ResponseEntity<Long> discardMasterAccessRequest(@PathVariable Long id) throws IOException {

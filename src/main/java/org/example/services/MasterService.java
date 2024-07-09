@@ -50,4 +50,6 @@ public interface MasterService {
     void validateEmail(String email, Long pin);
 
     Long toBid(BidDTO bidDTO);
+
+    Long verifyDocks(Long id);
 }

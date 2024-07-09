@@ -52,6 +52,9 @@ public class Master {
     @Column(name = "is_accepted")
     private Boolean isAccepted;
 
+    @Column(name = "is_verified_by_docks")
+    private Boolean isVerifiedByDocks = false;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

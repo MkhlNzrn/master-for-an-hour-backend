@@ -288,6 +288,14 @@ public class MasterServiceImpl implements MasterService {
         return bidRepository.save(new Bid(bidDTO.getDateStart(), bidDTO.getDateEnd(), bidDTO.getPrice(), task, master)).getId();
     }
 
+    @Override
+    public Long verifyDocks(Long id) {
+        Master master = masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id));
+        master.setIsVerifiedByDocks(true);
+        masterRepository.save(master);
+        return id;
+    }
+
     private void deleteMediaByUsername(String username) throws IOException {
         File directory = new File(PATH_TO_MEDIA + username);
         FileUtils.deleteDirectory(directory);
