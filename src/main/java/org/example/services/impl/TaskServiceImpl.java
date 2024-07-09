@@ -119,6 +119,7 @@ public class TaskServiceImpl implements TaskService {
                 .categoryId(task.getCategory().getId())
                 .categoryName(task.getCategory().getName())
                 .userId(task.getUser().getId())
+                .userName(task.getUser().getFirstName())
                 .build();
     }
 }
