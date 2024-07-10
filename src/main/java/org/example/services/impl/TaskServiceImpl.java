@@ -2,17 +2,11 @@ package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entities.*;
-import org.example.exceptions.CategoryNotFoundException;
-import org.example.exceptions.ClientNotFoundException;
-import org.example.exceptions.TaskNotFoundException;
+import org.example.exceptions.*;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
-import org.example.exceptions.NoTasksFoundException;
 import org.example.pojo.UpdateTaskDTO;
-import org.example.repositories.CategoryRepository;
-import org.example.repositories.ClientRepository;
-import org.example.repositories.TaskRepository;
-import org.example.repositories.UserRepository;
+import org.example.repositories.*;
 import org.example.services.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +25,7 @@ public class TaskServiceImpl implements TaskService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
+    private final MasterRepository masterRepository;
 
     @Override
     public Page<TaskDTO> getTasks(Pageable pageable) {
@@ -108,6 +103,13 @@ public class TaskServiceImpl implements TaskService {
 
         taskDTOs.forEach(taskDTO -> taskDTO.setUserName(user.getFirstName()));
         return taskDTOs;
+    }
+
+    @Override
+    public List<Task> getAllTasksByMaster(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
+        Master master = masterRepository.findByUser(user).orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
+        return taskRepository.findAllByMaster(master);
     }
 
 

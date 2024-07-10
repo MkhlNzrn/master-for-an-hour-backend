@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.entities.Task;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
 import org.example.pojo.UpdateTaskDTO;
@@ -24,4 +25,6 @@ public interface TaskService {
     List<TaskDTO> getTasksByCategoryId(Long id);
 
     List<TaskDTO> getTasksByUserId(Long id);
+
+    List<Task> getAllTasksByMaster(Long id);
 }

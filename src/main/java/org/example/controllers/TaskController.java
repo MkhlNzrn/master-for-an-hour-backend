@@ -3,6 +3,7 @@ package org.example.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.example.entities.Task;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
 import org.example.pojo.UpdateTaskDTO;
@@ -34,6 +35,12 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTask(id));
+    }
+
+    @Operation(description = "Get an information about all Tasks by Master Id")
+    @GetMapping("/master/{id}")
+    public ResponseEntity<List<Task>> getAllTasksByMaster(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.getAllTasksByMaster(id));
     }
 
     @Operation(description = "Search tasks by Category")
