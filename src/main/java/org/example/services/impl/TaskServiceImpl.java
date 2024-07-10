@@ -130,7 +130,7 @@ public class TaskServiceImpl implements TaskService {
                 .clientEmail(client.getEmail())
                 .clientPhoneNumber(client.getPhoneNumber())
                 .clientTelegramTag(client.getTelegramTag())
-                .masterId(master.getId())
+                .masterId(master.getUser().getId())
                 .masterName(master.getMiddleName()+" "+master.getFirstName()+" "+master.getLastName())
                 .masterEmail(master.getEmail())
                 .masterPhoneNumber(master.getPhoneNumber())
