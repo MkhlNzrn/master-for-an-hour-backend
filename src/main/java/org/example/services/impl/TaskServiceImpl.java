@@ -114,11 +114,10 @@ public class TaskServiceImpl implements TaskService {
 
 
     private TaskDTO convertToDTO(Task task) {
-        User user;
-        if (task.getMaster() == null) {
-            user = new User();
-            user.setId(null);
-        } else user = task.getMaster();
+        User user = task.getMaster();
+        Long userId;
+        if (user == null) userId  = null;
+        else userId = user.getId();
         Master master;
         if (masterRepository.findByUser(user).isEmpty()) master = new Master(null,null,null);
         else master = masterRepository.findByUser(user).get();
@@ -135,7 +134,7 @@ public class TaskServiceImpl implements TaskService {
                 .clientEmail(client.getEmail())
                 .clientPhoneNumber(client.getPhoneNumber())
                 .clientTelegramTag(client.getTelegramTag())
-                .masterId(user.getId())
+                .masterId(userId)
                 .masterName(master.getMiddleName()+" "+master.getFirstName()+" "+master.getLastName())
                 .masterEmail(master.getEmail())
                 .masterPhoneNumber(master.getPhoneNumber())
