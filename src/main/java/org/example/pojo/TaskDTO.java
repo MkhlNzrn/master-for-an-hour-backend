@@ -25,6 +25,8 @@ public class TaskDTO {
 
     private Long userId;
 
+    private Long masterId;
+
     private String userName;
 
     private String masterEmail;
