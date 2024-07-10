@@ -1,16 +1,17 @@
 package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.entities.Category;
-import org.example.entities.User;
+import org.example.entities.*;
 import org.example.exceptions.CategoryNotFoundException;
+import org.example.exceptions.ClientNotFoundException;
 import org.example.exceptions.TaskNotFoundException;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
-import org.example.entities.Task;
 import org.example.exceptions.NoTasksFoundException;
+import org.example.pojo.TaskFullInfoDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.example.repositories.CategoryRepository;
+import org.example.repositories.ClientRepository;
 import org.example.repositories.TaskRepository;
 import org.example.repositories.UserRepository;
 import org.example.services.TaskService;
@@ -31,6 +32,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final ClientRepository clientRepository;
 
     @Override
     public Page<TaskDTO> getTasks(Pageable pageable) {
@@ -108,6 +110,29 @@ public class TaskServiceImpl implements TaskService {
 
         taskDTOs.forEach(taskDTO -> taskDTO.setUserName(user.getFirstName()));
         return taskDTOs;
+    }
+
+    @Override
+    public TaskFullInfoDTO getFullInfoAboutTask(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
+        Master master = task.getMaster();
+        Client client = clientRepository.findByEmail(task.getUser().getUsername()).orElseThrow(() -> new ClientNotFoundException(task.getUser().getUsername()));
+        return TaskFullInfoDTO.builder()
+                .id(task.getId())
+                .description(task.getDescription())
+                .startDate(task.getStartDate())
+                .endDate(task.getEndDate())
+                .categoryId(task.getCategory().getId())
+                .categoryName(task.getCategory().getName())
+                .userId(task.getUser().getId())
+                .userName(task.getUser().getFirstName())
+                .clientEmail(client.getEmail())
+                .clientPhoneNumber(client.getPhoneNumber())
+                .clientTelegramTag(client.getTelegramTag())
+                .masterEmail(master.getEmail())
+                .masterPhoneNumber(master.getPhoneNumber())
+                .masterTelegramTag(master.getTelegramTag())
+                .build();
     }
 
     private TaskDTO convertToDTO(Task task) {

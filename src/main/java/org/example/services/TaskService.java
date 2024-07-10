@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
+import org.example.pojo.TaskFullInfoDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,6 @@ public interface TaskService {
     List<TaskDTO> getTasksByCategoryId(Long id);
 
     List<TaskDTO> getTasksByUserId(Long id);
+
+    TaskFullInfoDTO getFullInfoAboutTask(Long id);
 }
