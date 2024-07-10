@@ -32,7 +32,7 @@ public class Task {
     private User user;
 
     @ManyToOne
-    private Master master;
+    private User master;
 
     @ManyToOne
     private Category category;

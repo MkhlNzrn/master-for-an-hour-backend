@@ -114,9 +114,10 @@ public class TaskServiceImpl implements TaskService {
 
 
     private TaskDTO convertToDTO(Task task) {
+        User user = task.getMaster();
         Master master;
-        if (task.getMaster() == null) master = new Master(null,null,null);
-        else master = task.getMaster();
+        if (masterRepository.findByUser(user).isEmpty()) master = new Master(null,null,null);
+        else master = masterRepository.findByUser(user).get();
         Client client = clientRepository.findByEmail(task.getUser().getUsername()).orElseThrow(() -> new ClientNotFoundException(task.getUser().getUsername()));
         return TaskDTO.builder()
                 .id(task.getId())

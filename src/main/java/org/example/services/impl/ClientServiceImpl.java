@@ -47,7 +47,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Long chooseBid(Long id) {
         Bid bid = bidRepository.findById(id).orElseThrow(() -> new BidNotFoundException(id));
-        Master master = bid.getMaster();
+        User master = bid.getMaster().getUser();
         Task task = bid.getTask();
         task.setMaster(master);
         taskRepository.save(task);
