@@ -74,4 +74,11 @@ public class Master {
         this.photoLink = photoLink;
         this.user = user;
     }
+
+
+    public Master(String email, String phoneNumber, String telegramTag) {
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.telegramTag = telegramTag;
+    }
 }

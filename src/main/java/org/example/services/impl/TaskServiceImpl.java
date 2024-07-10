@@ -8,7 +8,6 @@ import org.example.exceptions.TaskNotFoundException;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
 import org.example.exceptions.NoTasksFoundException;
-import org.example.pojo.TaskFullInfoDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.example.repositories.CategoryRepository;
 import org.example.repositories.ClientRepository;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -112,12 +110,13 @@ public class TaskServiceImpl implements TaskService {
         return taskDTOs;
     }
 
-    @Override
-    public TaskFullInfoDTO getFullInfoAboutTask(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
-        Master master = task.getMaster();
+
+    private TaskDTO convertToDTO(Task task) {
+        Master master;
+        if (task.getMaster() == null) master = new Master(null,null,null);
+        else master = task.getMaster();
         Client client = clientRepository.findByEmail(task.getUser().getUsername()).orElseThrow(() -> new ClientNotFoundException(task.getUser().getUsername()));
-        return TaskFullInfoDTO.builder()
+        return TaskDTO.builder()
                 .id(task.getId())
                 .description(task.getDescription())
                 .startDate(task.getStartDate())
@@ -132,19 +131,6 @@ public class TaskServiceImpl implements TaskService {
                 .masterEmail(master.getEmail())
                 .masterPhoneNumber(master.getPhoneNumber())
                 .masterTelegramTag(master.getTelegramTag())
-                .build();
-    }
-
-    private TaskDTO convertToDTO(Task task) {
-        return TaskDTO.builder()
-                .id(task.getId())
-                .description(task.getDescription())
-                .startDate(task.getStartDate())
-                .endDate(task.getEndDate())
-                .categoryId(task.getCategory().getId())
-                .categoryName(task.getCategory().getName())
-                .userId(task.getUser().getId())
-                .userName(task.getUser().getFirstName())
                 .build();
     }
 }

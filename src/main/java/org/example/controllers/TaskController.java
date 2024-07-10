@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.TaskDTO;
-import org.example.pojo.TaskFullInfoDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.example.services.TaskService;
 import org.springframework.data.domain.Page;
@@ -35,12 +34,6 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTask(id));
-    }
-
-    @Operation(description = "Get an information about Task with Master and Client contacts")
-    @GetMapping("/full/{id}")
-    public ResponseEntity<TaskFullInfoDTO> getFullInfoAboutTask(@PathVariable Long id) {
-        return ResponseEntity.ok(taskService.getFullInfoAboutTask(id));
     }
 
     @Operation(description = "Search tasks by Category")

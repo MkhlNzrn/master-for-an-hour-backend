@@ -26,4 +26,16 @@ public class TaskDTO {
     private Long userId;
 
     private String userName;
+
+    private String masterEmail;
+
+    private String masterPhoneNumber;
+
+    private String masterTelegramTag;
+
+    private String clientEmail;
+
+    private String clientPhoneNumber;
+
+    private String clientTelegramTag;
 }
