@@ -114,7 +114,11 @@ public class TaskServiceImpl implements TaskService {
 
 
     private TaskDTO convertToDTO(Task task) {
-        User user = task.getMaster();
+        User user;
+        if (task.getMaster() == null) {
+            user = new User();
+            user.setId(null);
+        } else user = task.getMaster();
         Master master;
         if (masterRepository.findByUser(user).isEmpty()) master = new Master(null,null,null);
         else master = masterRepository.findByUser(user).get();
