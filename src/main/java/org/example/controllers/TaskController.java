@@ -39,7 +39,7 @@ public class TaskController {
 
     @Operation(description = "Get an information about all Tasks by Master's UserId")
     @GetMapping("/master/{id}")
-    public ResponseEntity<List<Task>> getAllTasksByMastersUserId(@PathVariable Long id) {
+    public ResponseEntity<List<TaskDTO>> getAllTasksByMastersUserId(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getAllTasksByMastersUserId(id));
     }
 
