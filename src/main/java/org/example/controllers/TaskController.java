@@ -37,10 +37,10 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTask(id));
     }
 
-    @Operation(description = "Get an information about all Tasks by Master Id")
+    @Operation(description = "Get an information about all Tasks by Master's UserId")
     @GetMapping("/master/{id}")
-    public ResponseEntity<List<Task>> getAllTasksByMaster(@PathVariable Long id) {
-        return ResponseEntity.ok(taskService.getAllTasksByMaster(id));
+    public ResponseEntity<List<Task>> getAllTasksByMastersUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.getAllTasksByMastersUserId(id));
     }
 
     @Operation(description = "Search tasks by Category")
@@ -49,10 +49,10 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTasksByCategoryId(id));
     }
 
-    @Operation(description = "Search tasks by User")
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<TaskDTO>> getTasksByUserId(@PathVariable Long id) {
-        return ResponseEntity.ok(taskService.getTasksByUserId(id));
+    @Operation(description = "Search tasks by Client's UserId")
+    @GetMapping("/client/{id}")
+    public ResponseEntity<List<TaskDTO>> getTasksByClientsUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.getTasksByClientsUserId(id));
     }
 
     @Operation(description = "Create new Task")

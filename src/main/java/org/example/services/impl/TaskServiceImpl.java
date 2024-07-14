@@ -94,9 +94,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> getTasksByUserId(Long id) {
+    public List<TaskDTO> getTasksByClientsUserId(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
-        List<Task> tasks = taskRepository.findAllByUser(user);
+        List<Task> tasks = taskRepository.findAllByClientsUserId(user);
         List<TaskDTO> taskDTOs = tasks.stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -106,10 +106,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAllTasksByMaster(Long id) {
+    public List<Task> getAllTasksByMastersUserId(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
-        Master master = masterRepository.findByUser(user).orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
-        return taskRepository.findAllByMaster(master);
+        return taskRepository.findAllByMastersUserId(user);
     }
 
 
@@ -121,7 +120,7 @@ public class TaskServiceImpl implements TaskService {
         Master master;
         if (masterRepository.findByUser(user).isEmpty()) master = new Master(null,null,null);
         else master = masterRepository.findByUser(user).get();
-        Client client = clientRepository.findByEmail(task.getUser().getUsername()).orElseThrow(() -> new ClientNotFoundException(task.getUser().getUsername()));
+        Client client = clientRepository.findByEmail(task.getClient().getUsername()).orElseThrow(() -> new ClientNotFoundException(task.getClient().getUsername()));
         return TaskDTO.builder()
                 .id(task.getId())
                 .description(task.getDescription())
@@ -129,8 +128,8 @@ public class TaskServiceImpl implements TaskService {
                 .endDate(task.getEndDate())
                 .categoryId(task.getCategory().getId())
                 .categoryName(task.getCategory().getName())
-                .userId(task.getUser().getId())
-                .userName(task.getUser().getFirstName())
+                .userId(task.getClient().getId())
+                .userName(task.getClient().getFirstName())
                 .clientEmail(client.getEmail())
                 .clientPhoneNumber(client.getPhoneNumber())
                 .clientTelegramTag(client.getTelegramTag())

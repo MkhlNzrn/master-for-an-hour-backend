@@ -24,7 +24,7 @@ public interface TaskService {
 
     List<TaskDTO> getTasksByCategoryId(Long id);
 
-    List<TaskDTO> getTasksByUserId(Long id);
+    List<TaskDTO> getTasksByClientsUserId(Long id);
 
-    List<Task> getAllTasksByMaster(Long id);
+    List<Task> getAllTasksByMastersUserId(Long id);
 }

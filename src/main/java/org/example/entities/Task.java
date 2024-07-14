@@ -29,7 +29,7 @@ public class Task {
     private Date endDate;
 
     @ManyToOne
-    private User user;
+    private User client;
 
     @ManyToOne
     private User master;
@@ -37,11 +37,11 @@ public class Task {
     @ManyToOne
     private Category category;
 
-    public Task(String description, Category category, Date startDate, Date endDate, User user) {
+    public Task(String description, Category category, Date startDate, Date endDate, User client) {
         this.description = description;
         this.category = category;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.user = user;
+        this.client = client;
     }
 }
