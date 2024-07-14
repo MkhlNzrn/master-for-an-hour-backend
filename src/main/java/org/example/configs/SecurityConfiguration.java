@@ -49,7 +49,6 @@ public class SecurityConfiguration {
                                 "/masters/documents", "/masters/photo", "/masters/{id}/photo",
                                 "/tasks/{id}", "/tasks/user/{id}").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/tasks/").hasRole("CLIENT")
                         .requestMatchers("/masters/bid", "/masters/full/{id}").hasRole("MASTER")
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .anyRequest().permitAll())
