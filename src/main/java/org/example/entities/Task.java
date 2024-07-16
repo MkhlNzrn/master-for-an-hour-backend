@@ -28,6 +28,9 @@ public class Task {
     @Column(name = "end_date")
     private Date endDate;
 
+    @Column(name = "is_completed")
+    private Boolean isCompleted;
+
     @ManyToOne
     private User client;
 
@@ -43,5 +46,6 @@ public class Task {
         this.startDate = startDate;
         this.endDate = endDate;
         this.client = client;
+        this.isCompleted = false;
     }
 }

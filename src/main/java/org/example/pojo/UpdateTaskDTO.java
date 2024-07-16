@@ -20,5 +20,7 @@ public class UpdateTaskDTO {
 
     private Date endDate;
 
+    private Boolean isCompleted;
+
     private String categoryName;
 }

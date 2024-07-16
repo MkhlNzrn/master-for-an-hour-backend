@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                                 "/tasks/{id}", "/tasks/user/{id}").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/masters/bid", "/masters/full/{id}").hasRole("MASTER")
+                        .requestMatchers("/tasks/{id}/complete").hasRole("CLIENT")
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

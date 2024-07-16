@@ -73,6 +73,8 @@ public class TaskServiceImpl implements TaskService {
             task.setStartDate(taskDTO.getStartDate());
         if (!taskDTO.getEndDate().toString().isEmpty() && !taskDTO.getEndDate().equals(task.getEndDate()))
             task.setEndDate(taskDTO.getEndDate());
+        if (taskDTO.getIsCompleted() != null && !taskDTO.getIsCompleted().equals(task.getIsCompleted()))
+            task.setIsCompleted(taskDTO.getIsCompleted());
         taskRepository.save(task);
         return task.getId();
     }
@@ -111,6 +113,14 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findAllByMastersUserId(user).stream().map(this::convertToDTO).toList();
     }
 
+    @Override
+    public Long markAsCompleted(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
+        task.setIsCompleted(true);
+        taskRepository.save(task);
+        return task.getId();
+    }
+
 
     private TaskDTO convertToDTO(Task task) {
         User user = task.getMaster();
@@ -126,6 +136,7 @@ public class TaskServiceImpl implements TaskService {
                 .description(task.getDescription())
                 .startDate(task.getStartDate())
                 .endDate(task.getEndDate())
+                .isCompleted(task.getIsCompleted())
                 .categoryId(task.getCategory().getId())
                 .categoryName(task.getCategory().getName())
                 .userId(task.getClient().getId())

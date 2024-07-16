@@ -19,6 +19,8 @@ public class TaskDTO {
 
     private Date endDate;
 
+    private Boolean isCompleted;
+
     private Long categoryId;
 
     private String categoryName;

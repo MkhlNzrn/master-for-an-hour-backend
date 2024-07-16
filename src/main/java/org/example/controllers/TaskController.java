@@ -72,4 +72,10 @@ public class TaskController {
     public ResponseEntity<Long> updateTask(@RequestBody UpdateTaskDTO taskDTO) {
         return ResponseEntity.ok(taskService.updateTask(taskDTO));
     }
+
+    @Operation(description = "Mark Task as completed")
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Long> markAsCompleted(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.markAsCompleted(id));
+    }
 }

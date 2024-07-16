@@ -27,4 +27,6 @@ public interface TaskService {
     List<TaskDTO> getTasksByClientsUserId(Long id);
 
     List<TaskDTO> getAllTasksByMastersUserId(Long id);
+
+    Long markAsCompleted(Long id);
 }
