@@ -36,6 +36,7 @@ public class ProfileServiceImpl implements ProfileService {
                     .id(master.getId())
                     .firstName(master.getFirstName())
                     .middleName(master.getMiddleName())
+.categories(master.getCategories())
                     .lastName(master.getLastName())
                     .metroStation(master.getMetroStation())
                     .description(master.getDescription())
