@@ -264,7 +264,10 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public InputStream getPhoto(Long id) throws FileNotFoundException {
-        Master master = masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found by id: " + id));
+        Master master = masterRepository.findByUser(user)
+                .orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
         File file = new File(master.getPhotoLink());
         return new FileInputStream(file);
     }
