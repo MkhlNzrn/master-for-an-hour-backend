@@ -30,9 +30,7 @@ public class ProfileDTO {
 
     private String description;
 
-    private String feedback;
-
-    private Float rate;
+    private List<String> categories;
 
     private byte age;
 
