@@ -25,4 +25,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query(value = "select t from Task t where t.master = ?1")
     List<Task> findAllByMastersUserId(User master);
+
+    @Query(value = "select * from tasks where master_id = ?1", nativeQuery = true)
+    List<Task> findAllByMastersUserId(Long masterUserId);
 }

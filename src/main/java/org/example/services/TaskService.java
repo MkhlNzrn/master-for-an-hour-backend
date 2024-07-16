@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.entities.Task;
 import org.example.pojo.CreateTaskDTO;
+import org.example.pojo.SendFeedbackDTO;
 import org.example.pojo.TaskDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.springframework.data.domain.Page;
@@ -29,4 +30,6 @@ public interface TaskService {
     List<TaskDTO> getAllTasksByMastersUserId(Long id);
 
     Long markAsCompleted(Long id);
+
+    Long sendFeedback(SendFeedbackDTO sendFeedbackDTO);
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.BidDTO;
+import org.example.pojo.GetFeedbackResponse;
 import org.example.pojo.MasterDTO;
 import org.example.pojo.MasterInfoDTO;
 import org.example.services.MasterService;
@@ -89,6 +90,11 @@ public class MasterController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("image/jpeg"))
                 .body(new InputStreamResource(masterService.getPhoto(id)));
+    }
+
+    @GetMapping("/{id}/feedbacks")
+    public ResponseEntity<List<GetFeedbackResponse>> getFeedbacks(@PathVariable Long id) {
+        return ResponseEntity.ok(masterService.getFeedbacks(id));
     }
 
     @Operation(description = "Delete Master")

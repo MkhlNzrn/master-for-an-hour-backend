@@ -19,6 +19,10 @@ public class TaskDTO {
 
     private Date endDate;
 
+    private Float rate;
+
+    private String feedback;
+
     private Boolean isCompleted;
 
     private Long categoryId;

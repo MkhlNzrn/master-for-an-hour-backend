@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.*;
 import org.example.exceptions.*;
-import org.example.pojo.BidDTO;
-import org.example.pojo.MasterDTO;
-import org.example.pojo.MasterInfoDTO;
-import org.example.pojo.SignUpRequest;
+import org.example.pojo.*;
 import org.example.repositories.*;
 import org.example.services.EmailService;
 import org.example.services.MasterService;
@@ -32,8 +29,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class
-MasterServiceImpl implements MasterService {
+public class MasterServiceImpl implements MasterService {
 
     private final MasterRepository masterRepository;
 
@@ -102,7 +98,7 @@ MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public PathSet<String> uploadDocument(List<MultipartFile> multipartFiles, String username) throws IOException { //Todo: Узнать про формат и лимит документов
+    public PathSet<String> uploadDocument(List<MultipartFile> multipartFiles, String username) throws IOException {
         PathSet<String> paths = new PathSet<>();
         Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/documents/"));
         int countDocuments = countFilesInDirectory(PATH_TO_MEDIA + username + "/documents/");
@@ -315,6 +311,16 @@ MasterServiceImpl implements MasterService {
         master.setIsVerifiedByDocks(true);
         masterRepository.save(master);
         return id;
+    }
+
+    @Override
+    public List<GetFeedbackResponse> getFeedbacks(Long id) {
+        List<Task> tasks = taskRepository.findAllByMastersUserId(id);
+        List<GetFeedbackResponse> feedbacks = new ArrayList<>();
+        for (Task task : tasks) {
+            feedbacks.add(GetFeedbackResponse.builder().feedback(task.getFeedback()).rate(task.getRate()).build());
+        }
+        return feedbacks;
     }
 
     private void deleteMediaByUsername(String username) throws IOException {

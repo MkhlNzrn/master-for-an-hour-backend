@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.entities.Task;
 import org.example.pojo.CreateTaskDTO;
+import org.example.pojo.SendFeedbackDTO;
 import org.example.pojo.TaskDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.example.services.TaskService;
@@ -71,6 +72,12 @@ public class TaskController {
     @PatchMapping("/")
     public ResponseEntity<Long> updateTask(@RequestBody UpdateTaskDTO taskDTO) {
         return ResponseEntity.ok(taskService.updateTask(taskDTO));
+    }
+
+    @Operation(description = "Send feedback")
+    @PatchMapping("/feedback")
+    public ResponseEntity<Long> sendFeedback(@RequestBody SendFeedbackDTO sendFeedbackDTO) {
+        return ResponseEntity.ok(taskService.sendFeedback(sendFeedbackDTO));
     }
 
     @Operation(description = "Mark Task as completed")

@@ -2,13 +2,11 @@ package org.example.services;
 
 
 import org.example.entities.User;
-import org.example.pojo.BidDTO;
-import org.example.pojo.MasterDTO;
-import org.example.pojo.MasterInfoDTO;
-import org.example.pojo.SignUpRequest;
+import org.example.pojo.*;
 import org.example.wrappers.PathSet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,4 +50,6 @@ public interface MasterService {
     Long toBid(BidDTO bidDTO);
 
     Long verifyDocks(Long id);
+
+    List<GetFeedbackResponse> getFeedbacks(Long id);
 }

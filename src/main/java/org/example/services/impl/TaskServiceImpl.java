@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.entities.*;
 import org.example.exceptions.*;
 import org.example.pojo.CreateTaskDTO;
+import org.example.pojo.SendFeedbackDTO;
 import org.example.pojo.TaskDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.example.repositories.*;
@@ -75,13 +76,18 @@ public class TaskServiceImpl implements TaskService {
             task.setEndDate(taskDTO.getEndDate());
         if (taskDTO.getIsCompleted() != null && !taskDTO.getIsCompleted().equals(task.getIsCompleted()))
             task.setIsCompleted(taskDTO.getIsCompleted());
+        if (!taskDTO.getFeedback().isEmpty() && !taskDTO.getFeedback().equals(task.getFeedback()))
+            task.setFeedback(taskDTO.getFeedback());
+        if (taskDTO.getRate() != null && !taskDTO.getRate().equals(task.getRate()))
+            task.setRate(taskDTO.getRate());
         taskRepository.save(task);
         return task.getId();
     }
 
     @Override
     public List<TaskDTO> getTasksByCategoryId(Long id) {
-        List<Task> tasks = taskRepository.findAllByCategory(categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id)));
+        List<Task> tasks = taskRepository.findAllByCategory(categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(id)));
         List<TaskDTO> taskDTOs = tasks.stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -97,7 +103,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> getTasksByClientsUserId(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
         List<Task> tasks = taskRepository.findAllByClientsUserId(user);
         List<TaskDTO> taskDTOs = tasks.stream()
                 .map(this::convertToDTO)
@@ -107,9 +114,23 @@ public class TaskServiceImpl implements TaskService {
         return taskDTOs;
     }
 
+    public Long sendFeedback(SendFeedbackDTO sendFeedbackDTO) {
+        Task task = taskRepository.findById(sendFeedbackDTO.getTaskId())
+                .orElseThrow(() -> new TaskNotFoundException(sendFeedbackDTO.getTaskId()));
+        Master master = masterRepository.findByUser(task.getMaster())
+                .orElseThrow(() -> new MasterNotFoundException(task.getMaster().getUsername()));
+        task.setFeedback(sendFeedbackDTO.getFeedback());
+        task.setRate(sendFeedbackDTO.getRate());
+        if (master.getRate() != 0) master.setRate((master.getRate()+sendFeedbackDTO.getRate())/2);
+        else master.setRate(sendFeedbackDTO.getRate());
+        masterRepository.save(master);
+        return taskRepository.save(task).getId();
+    }
+
     @Override
     public List<TaskDTO> getAllTasksByMastersUserId(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));
         return taskRepository.findAllByMastersUserId(user).stream().map(this::convertToDTO).toList();
     }
 
@@ -130,12 +151,15 @@ public class TaskServiceImpl implements TaskService {
         Master master;
         if (masterRepository.findByUser(user).isEmpty()) master = new Master(null,null,null);
         else master = masterRepository.findByUser(user).get();
-        Client client = clientRepository.findByEmail(task.getClient().getUsername()).orElseThrow(() -> new ClientNotFoundException(task.getClient().getUsername()));
+        Client client = clientRepository.findByEmail(task.getClient().getUsername())
+                .orElseThrow(() -> new ClientNotFoundException(task.getClient().getUsername()));
         return TaskDTO.builder()
                 .id(task.getId())
                 .description(task.getDescription())
                 .startDate(task.getStartDate())
                 .endDate(task.getEndDate())
+                .rate(null)
+                .feedback(null)
                 .isCompleted(task.getIsCompleted())
                 .categoryId(task.getCategory().getId())
                 .categoryName(task.getCategory().getName())

@@ -16,6 +16,10 @@ public class UpdateTaskDTO {
 
     private String description;
 
+    private Float rate;
+
+    private String feedback;
+
     private Date startDate;
 
     private Date endDate;

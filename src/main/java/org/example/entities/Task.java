@@ -31,6 +31,12 @@ public class Task {
     @Column(name = "is_completed")
     private Boolean isCompleted;
 
+    @Column(name = "rate")
+    private Float rate;
+
+    @Column(name = "feedback")
+    private String feedback;
+
     @ManyToOne
     private User client;
 
@@ -47,5 +53,7 @@ public class Task {
         this.endDate = endDate;
         this.client = client;
         this.isCompleted = false;
+        this.rate = null;
+        this.feedback = null;
     }
 }
