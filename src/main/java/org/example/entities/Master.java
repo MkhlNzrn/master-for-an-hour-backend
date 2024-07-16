@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "masters")
 @Getter
@@ -52,6 +54,9 @@ public class Master {
     @Column(name = "is_accepted")
     private Boolean isAccepted;
 
+    @ManyToMany
+    private List<Category> categories;
+
     @Column(name = "is_verified_by_docks")
     private Boolean isVerifiedByDocks = false;
 
@@ -59,7 +64,7 @@ public class Master {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Master(String firstName, String middleName, String lastName, String email, Boolean isAccepted, String metroStation, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, User user) {
+    public Master(String firstName, List<Category> categories,  String middleName, String lastName, String email, Boolean isAccepted, String metroStation, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, User user) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -69,6 +74,7 @@ public class Master {
         this.phoneNumber = phoneNumber;
         this.telegramTag = telegramTag;
         this.description = description;
+        this.categories = categories;
         this.age = age;
         this.rate = rate;
         this.photoLink = photoLink;

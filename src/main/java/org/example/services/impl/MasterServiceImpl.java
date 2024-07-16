@@ -45,6 +45,7 @@ MasterServiceImpl implements MasterService {
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
     private final TaskRepository taskRepository;
+    private final CategoryRepository categoryRepository;
 
     @Value("${media.documents.limit.count}")
     private int DOCUMENTS_COUNT_LIMIT;
@@ -81,6 +82,7 @@ MasterServiceImpl implements MasterService {
                 .metroStation(master.getMetroStation())
                 .description(master.getDescription())
                 .age(master.getAge())
+                .categories(convertCategoriesToString(master.getCategories()))
                 .rate(master.getRate())
                 .photoLink(master.getPhotoLink())
                 .documents(documentRepository.findByMaster(master))
@@ -176,6 +178,7 @@ MasterServiceImpl implements MasterService {
                 .rate(master.getRate())
                 .photoLink(master.getPhotoLink())
                 .isAccepted(master.getIsAccepted())
+                .categories(convertCategoriesToString(master.getCategories()))
                 .documents(documentRepository.findByMaster(master))
                 .userId(master.getUser().getId())
                 .build();
@@ -196,6 +199,7 @@ MasterServiceImpl implements MasterService {
         Master master = masterRepository.save(
                 new Master(
                         request.getFirstName(),
+                        convertStringsToCategories(request.getCategories()),
                         request.getMiddleName(),
                         request.getLastName(),
                         request.getEmail(),
@@ -266,6 +270,22 @@ MasterServiceImpl implements MasterService {
         Master master = masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id));
         File file = new File(master.getPhotoLink());
         return new FileInputStream(file);
+    }
+
+    private List<String> convertCategoriesToString(List<Category> categories) {
+        List<String> stringCategories = new ArrayList<>();
+        for (Category category : categories) {
+            stringCategories.add(category.getName());
+        }
+        return stringCategories;
+    }
+
+    private List<Category> convertStringsToCategories(List<String> stringCategories) {
+        List<Category> categories = new ArrayList<>();
+        for (String categoryName : stringCategories) {
+            categories.add(categoryRepository.findByName(categoryName).orElseThrow(() -> new CategoryNotFoundException(categoryName)));
+        }
+        return categories;
     }
 
     @Override

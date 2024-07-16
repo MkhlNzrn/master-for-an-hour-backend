@@ -49,5 +49,7 @@ public class SignUpRequest {
 
     private String photoLink;
 
+    private List<String> categories;
+
     private List<DocumentDTO> documents;
 }

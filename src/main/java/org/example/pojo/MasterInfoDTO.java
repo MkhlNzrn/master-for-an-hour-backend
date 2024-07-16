@@ -28,6 +28,8 @@ public class MasterInfoDTO {
 
     private String photoLink;
 
+    private List<String> categories;
+
     private List<Document> documents;
 
 }

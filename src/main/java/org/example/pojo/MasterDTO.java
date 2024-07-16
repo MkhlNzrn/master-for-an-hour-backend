@@ -38,5 +38,7 @@ public class MasterDTO {
 
     private List<Document> documents;
 
+    private List<String> categories;
+
     private Long userId;
 }
