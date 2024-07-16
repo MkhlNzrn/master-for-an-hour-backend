@@ -36,7 +36,7 @@ public class ProfileServiceImpl implements ProfileService {
                     .id(master.getId())
                     .firstName(master.getFirstName())
                     .middleName(master.getMiddleName())
-.categories(master.getCategories())
+.categories(convertCategoriesToString(master.getCategories()))
                     .lastName(master.getLastName())
                     .metroStation(master.getMetroStation())
                     .description(master.getDescription())
@@ -65,5 +65,13 @@ public class ProfileServiceImpl implements ProfileService {
         } else {
             throw new InvalidRoleException(user.getRole().name());
         }
+    }
+
+private List<String> convertCategoriesToString(List<Category> categories) {
+        List<String> stringCategories = new ArrayList<>();
+        for (Category category : categories) {
+            stringCategories.add(category.getName());
+        }
+        return stringCategories;
     }
 }
