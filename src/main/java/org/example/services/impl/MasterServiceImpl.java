@@ -145,9 +145,7 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
+        Master master = masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username));
         if (master.getPhotoAdded()) {
             Path path = Path.of(master.getPhotoLink());
             Files.delete(path);
