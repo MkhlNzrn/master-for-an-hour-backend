@@ -16,6 +16,7 @@ import org.example.services.UserService;
 import org.example.wrappers.PathSet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -304,6 +306,13 @@ public class MasterServiceImpl implements MasterService {
         if (emailPin.getPin() == pin) {
             emailsPinsRepository.delete(emailPin);
         } else throw new InvalidPinException(pin);
+    }
+
+    @Override
+    public List<MasterDTO> getTop10MastersByRate() {
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Master> topMasters = masterRepository.findTop10ByOrderByRateDesc(pageable);
+        return topMasters.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override

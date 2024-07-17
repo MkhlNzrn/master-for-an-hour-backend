@@ -105,6 +105,13 @@ public class MasterController {
                 .body(new InputStreamResource(masterService.getPhoto(key)));
     }
 
+    @GetMapping("/top10")
+    public ResponseEntity<List<MasterDTO>> getTop10MastersByRate() {
+        List<MasterDTO> topMasters = masterService.getTop10MastersByRate();
+        return ResponseEntity.ok(topMasters);
+    }
+
+
     @GetMapping("/{id}/feedbacks")
     public ResponseEntity<List<GetFeedbackResponse>> getFeedbacks(@PathVariable Long id) {
         return ResponseEntity.ok(masterService.getFeedbacks(id));

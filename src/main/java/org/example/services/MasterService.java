@@ -49,6 +49,8 @@ public interface MasterService {
 
     InputStream getPhoto(String key) throws MalformedURLException, FileNotFoundException;
 
+    List<MasterDTO> getTop10MastersByRate();
+
     void validateEmail(String email, Long pin);
 
     Long toBid(BidDTO bidDTO);
