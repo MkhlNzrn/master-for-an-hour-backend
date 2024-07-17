@@ -29,7 +29,7 @@ public interface MasterService {
 
     PathSet<String> uploadDocument(List<MultipartFile> files, String username) throws IOException;
 
-    String uploadPhoto(MultipartFile multipartFile, String username) throws IOException;
+    InputStream uploadPhoto(MultipartFile multipartFile, String username) throws IOException;
 
     Long createMasterAccountRequest(SignUpRequest request, User user) throws IOException;
 

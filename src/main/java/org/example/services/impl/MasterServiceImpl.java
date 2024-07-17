@@ -144,7 +144,7 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
+    public InputStream uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
         Master master = masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username));
         if (master.getPhotoAdded()) {
             Path path = Path.of(master.getPhotoLink());
@@ -156,7 +156,7 @@ public class MasterServiceImpl implements MasterService {
         master.setPhotoLink(file.getAbsolutePath());
         master.setPhotoAdded(true);
         masterRepository.save(master);
-        return file.getAbsolutePath();
+        return new FileInputStream(file);
     }
 
     private MasterDTO convertToDTO(Master master) {

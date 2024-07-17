@@ -76,8 +76,10 @@ public class MasterController {
     }
 
     @PostMapping("/photo")
-    public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam String username) throws IOException {
-        return ResponseEntity.ok(masterService.uploadPhoto(multipartFile, username));
+    public ResponseEntity<InputStreamResource> uploadPhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam String username) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("image/jpeg"))
+                .body(new InputStreamResource(masterService.uploadPhoto(multipartFile, username)));
     }
 
     @PostMapping("/bid")
