@@ -143,8 +143,8 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
-        Files.createDirectories(Paths.get("/root/MasterForAnHour/media/" + username + "/photo/"));
-        File file = new File("/root/MasterForAnHour/media/" + username + "/photo/" + multipartFile.getOriginalFilename());
+        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
+        File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
