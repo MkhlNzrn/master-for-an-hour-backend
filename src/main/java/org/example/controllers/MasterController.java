@@ -80,11 +80,6 @@ public class MasterController {
         return ResponseEntity.ok(masterService.uploadPhoto(multipartFile, username));
     }
 
-    @PatchMapping("/update-photo")
-    public ResponseEntity<String> updatePhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam String photoLink) throws IOException {
-        return ResponseEntity.ok(masterService.updatePhoto(multipartFile, photoLink));
-    }
-
     @PostMapping("/bid")
     public ResponseEntity<Long> toBid(@RequestBody BidDTO bidDTO) {
         return ResponseEntity.ok(masterService.toBid(bidDTO));

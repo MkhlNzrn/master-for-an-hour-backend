@@ -145,26 +145,18 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
+        if (master.getPhotoAdded()) {
+            Path path = Path.of(master.getPhotoLink());
+            Files.delete(path);
+        }
         Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
         File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
         master.setPhotoLink(file.getAbsolutePath());
-        masterRepository.save(master);
-        return file.getAbsolutePath();
-    }
-
-    public String updatePhoto(MultipartFile multipartFile, String photoLink) throws IOException {
-        Path path = Path.of(photoLink);
-        Files.delete(path);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        File file = new File(PATH_TO_MEDIA + email + "/photo/" + multipartFile.getOriginalFilename());
-        multipartFile.transferTo(file);
-        Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
-        master.setPhotoLink(file.getAbsolutePath());
+        master.setPhotoAdded(true);
         masterRepository.save(master);
         return file.getAbsolutePath();
     }

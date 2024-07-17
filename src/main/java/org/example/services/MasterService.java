@@ -21,8 +21,6 @@ public interface MasterService {
 
     MasterDTO getMaster(Long id);
 
-    String updatePhoto(MultipartFile multipartFile, String photoLink) throws IOException;
-
     MasterInfoDTO getMasterInfo(Long id);
 
     Page<MasterDTO> getAllMasters(Pageable pageable);

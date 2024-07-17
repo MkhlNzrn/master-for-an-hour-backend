@@ -51,6 +51,9 @@ public class Master {
     @Column(name = "photo_link")
     private String photoLink;
 
+    @Column(name = "photo_added")
+    private Boolean photoAdded;
+
     @Column(name = "is_accepted")
     private Boolean isAccepted;
 
@@ -79,6 +82,7 @@ public class Master {
         this.rate = rate;
         this.photoLink = photoLink;
         this.user = user;
+        this.photoAdded = false;
     }
 
 
