@@ -27,8 +27,6 @@ public interface MasterService {
 
     List<String> getMetroStations();
 
-    String uploadPhotoReg(MultipartFile multipartFile, String username) throws IOException;
-
     PathSet<String> uploadDocument(List<MultipartFile> files, String username) throws IOException;
 
     String uploadPhoto(MultipartFile multipartFile, String username) throws IOException;

@@ -159,14 +159,6 @@ public class MasterServiceImpl implements MasterService {
         return file.getAbsolutePath();
     }
 
-    @Override
-    public String uploadPhotoReg(MultipartFile multipartFile, String username) throws IOException {
-        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
-        File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
-        multipartFile.transferTo(file);
-        return file.getAbsolutePath();
-    }
-
     private MasterDTO convertToDTO(Master master) {
         return MasterDTO.builder()
                 .id(master.getId())
@@ -280,13 +272,6 @@ public class MasterServiceImpl implements MasterService {
         return new FileInputStream(file);
     }
 
-    @Override
-    public InputStream getPhoto(String key) throws FileNotFoundException {
-        File file = new File(key);
-        if (!file.exists()) throw new FileNotFoundException("Photo not found");
-        return new FileInputStream(file);
-    }
-
     private List<String> convertCategoriesToString(List<Category> categories) {
         List<String> stringCategories = new ArrayList<>();
         for (Category category : categories) {
@@ -330,6 +315,13 @@ public class MasterServiceImpl implements MasterService {
         master.setIsVerifiedByDocks(true);
         masterRepository.save(master);
         return id;
+    }
+
+    @Override
+    public InputStream getPhoto(String key) throws FileNotFoundException {
+        File file = new File(key);
+        if (!file.exists()) throw new FileNotFoundException("Photo not found");
+        return new FileInputStream(file);
     }
 
     @Override
