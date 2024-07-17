@@ -162,7 +162,9 @@ public class MasterServiceImpl implements MasterService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         File file = new File(PATH_TO_MEDIA + email + "/photo/" + multipartFile.getOriginalFilename());
-        masterRepository.updateByEmail(email, file.getAbsolutePath());
+        Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
+        master.setPhotoLink(photoLink);
+        masterRepository.save(master);
         return file.getAbsolutePath();
     }
 
