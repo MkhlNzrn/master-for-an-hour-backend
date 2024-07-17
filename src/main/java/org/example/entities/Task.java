@@ -37,6 +37,9 @@ public class Task {
     @Column(name = "feedback")
     private String feedback;
 
+    @Column(name = "price")
+    private Long price;
+
     @ManyToOne
     private User client;
 
@@ -55,5 +58,6 @@ public class Task {
         this.isCompleted = false;
         this.rate = null;
         this.feedback = null;
+        this.price = null;
     }
 }

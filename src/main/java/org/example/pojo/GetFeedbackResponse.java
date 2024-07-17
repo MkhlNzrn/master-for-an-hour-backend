@@ -8,4 +8,7 @@ import lombok.Data;
 public class GetFeedbackResponse {
     private String feedback;
     private Float rate;
+    private Long price;
+    private String categoryName;
+    private String clientName;
 }

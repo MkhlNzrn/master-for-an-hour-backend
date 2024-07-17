@@ -322,7 +322,15 @@ public class MasterServiceImpl implements MasterService {
         List<Task> tasks = taskRepository.findAllByMastersUserId(id);
         List<GetFeedbackResponse> feedbacks = new ArrayList<>();
         for (Task task : tasks) {
-            feedbacks.add(GetFeedbackResponse.builder().feedback(task.getFeedback()).rate(task.getRate()).build());
+            feedbacks.add(
+                    GetFeedbackResponse.builder()
+                            .feedback(task.getFeedback())
+                            .rate(task.getRate())
+                            .price(task.getPrice())
+                            .categoryName(task.getCategory().getName())
+                            .clientName(task.getClient().getFirstName())
+                            .build()
+            );
         }
         return feedbacks;
     }

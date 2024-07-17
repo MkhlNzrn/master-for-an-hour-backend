@@ -12,10 +12,8 @@ import org.example.repositories.ClientRepository;
 import org.example.repositories.TaskRepository;
 import org.example.repositories.UserRepository;
 import org.example.services.ClientService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,6 +48,7 @@ public class ClientServiceImpl implements ClientService {
         User master = bid.getMaster().getUser();
         Task task = bid.getTask();
         task.setMaster(master);
+        task.setPrice(bid.getPrice());
         taskRepository.save(task);
         bidRepository.deleteAllByTask(task);
         return master.getId();
