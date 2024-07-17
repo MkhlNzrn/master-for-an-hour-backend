@@ -101,6 +101,14 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
+    public String uploadPhotoReg(MultipartFile multipartFile, String username) throws IOException {
+        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
+        File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(file);
+        return file.getAbsolutePath();
+    }
+
+    @Override
     public PathSet<String> uploadDocument(List<MultipartFile> multipartFiles, String username) throws IOException {
         PathSet<String> paths = new PathSet<>();
         Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/documents/"));
@@ -158,6 +166,8 @@ public class MasterServiceImpl implements MasterService {
         masterRepository.save(master);
         return file.getAbsolutePath();
     }
+
+
 
     private MasterDTO convertToDTO(Master master) {
         return MasterDTO.builder()
