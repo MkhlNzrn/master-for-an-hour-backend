@@ -25,4 +25,7 @@ public interface MasterRepository extends JpaRepository<Master, Long> {
     List<Master> findAllByIsAcceptedFalse();
 
     Optional<Master> findByUser(User user);
+
+    @Query("UPDATE Master m SET m.photoLink = :photoLink WHERE m.email = :email")
+    void updateByEmail(String email, String photoLink);
 }

@@ -150,15 +150,19 @@ public class MasterServiceImpl implements MasterService {
         multipartFile.transferTo(file);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        if (!Objects.equals(email, "anonymousUser") && email != null) {
-            Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
-            if (!master.getPhotoLink().isEmpty()) {
-                Path path = Paths.get(master.getPhotoLink());
-                Files.delete(path);
-            }
-            master.setPhotoLink(file.getAbsolutePath());
-            masterRepository.save(master);
-        }
+        Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
+        master.setPhotoLink(file.getAbsolutePath());
+        masterRepository.save(master);
+        return file.getAbsolutePath();
+    }
+
+    public String updatePhoto(MultipartFile multipartFile, String photoLink) throws IOException {
+        Path path = Path.of(photoLink);
+        Files.delete(path);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        File file = new File(PATH_TO_MEDIA + email + "/photo/" + multipartFile.getOriginalFilename());
+        masterRepository.updateByEmail(email, file.getAbsolutePath());
         return file.getAbsolutePath();
     }
 
