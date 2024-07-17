@@ -29,7 +29,7 @@ public interface MasterService {
 
     PathSet<String> uploadDocument(List<MultipartFile> files, String username) throws IOException;
 
-    InputStream uploadPhoto(MultipartFile multipartFile, String username) throws IOException;
+    String uploadPhoto(MultipartFile multipartFile, String username) throws IOException;
 
     Long createMasterAccountRequest(SignUpRequest request, User user) throws IOException;
 
@@ -44,6 +44,8 @@ public interface MasterService {
     void sendValidationMsgToEmail(String email);
 
     InputStream getPhoto(Long id) throws MalformedURLException, FileNotFoundException;
+
+    InputStream getPhoto(String key) throws MalformedURLException, FileNotFoundException;
 
     void validateEmail(String email, Long pin);
 

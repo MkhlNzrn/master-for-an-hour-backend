@@ -76,10 +76,8 @@ public class MasterController {
     }
 
     @PostMapping("/photo")
-    public ResponseEntity<InputStreamResource> uploadPhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam String username) throws IOException {
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("image/jpeg"))
-                .body(new InputStreamResource(masterService.uploadPhoto(multipartFile, username)));
+    public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam String username) throws IOException {
+        return ResponseEntity.ok(masterService.uploadPhoto(multipartFile, username));
     }
 
     @PostMapping("/bid")
@@ -92,6 +90,14 @@ public class MasterController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("image/jpeg"))
                 .body(new InputStreamResource(masterService.getPhoto(id)));
+    }
+
+
+    @GetMapping("/photo/{key}")
+    public ResponseEntity<InputStreamResource> getPhoto(@PathVariable String key) throws MalformedURLException, FileNotFoundException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("image/jpeg"))
+                .body(new InputStreamResource(masterService.getPhoto(key)));
     }
 
     @GetMapping("/{id}/feedbacks")

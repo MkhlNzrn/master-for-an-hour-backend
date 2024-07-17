@@ -144,19 +144,27 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public InputStream uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
-        Master master = masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username));
-        if (master.getPhotoAdded()) {
-            Path path = Path.of(master.getPhotoLink());
-            Files.delete(path);
+    public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            Master master = masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username));
+            if (master.getPhotoAdded()) {
+                Path path = Path.of(master.getPhotoLink());
+                Files.delete(path);
+            }
+            Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
+            File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
+            multipartFile.transferTo(file);
+            master.setPhotoLink(file.getAbsolutePath());
+            master.setPhotoAdded(true);
+            masterRepository.save(master);
+            return file.getAbsolutePath();
+        } else {
+            Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
+            File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
+            multipartFile.transferTo(file);
+            return file.getAbsolutePath();
         }
-        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
-        File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
-        multipartFile.transferTo(file);
-        master.setPhotoLink(file.getAbsolutePath());
-        master.setPhotoAdded(true);
-        masterRepository.save(master);
-        return new FileInputStream(file);
     }
 
     private MasterDTO convertToDTO(Master master) {
@@ -269,6 +277,13 @@ public class MasterServiceImpl implements MasterService {
                 .orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
         if (master.getPhotoLink() == null) throw new NullPointerException("Photo link is null");
         File file = new File(master.getPhotoLink());
+        return new FileInputStream(file);
+    }
+
+    @Override
+    public InputStream getPhoto(String key) throws FileNotFoundException {
+        File file = new File(key);
+        if (!file.exists()) throw new FileNotFoundException("Photo not found");
         return new FileInputStream(file);
     }
 
