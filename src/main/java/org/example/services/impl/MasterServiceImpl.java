@@ -268,7 +268,7 @@ public class MasterServiceImpl implements MasterService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by id: " + id));
         Master master = masterRepository.findByUser(user)
                 .orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
-        if (master.getPhotoLink().isEmpty()) return null;
+        if (master.getPhotoLink() == null) return null;
         File file = new File(master.getPhotoLink());
         return new FileInputStream(file);
     }
