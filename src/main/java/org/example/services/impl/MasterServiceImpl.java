@@ -2,6 +2,7 @@ package org.example.services.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.*;
 
@@ -30,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MasterServiceImpl implements MasterService {
@@ -146,7 +148,8 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
         Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
-        File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
+        String pathStr = PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename();
+        File file = new File(pathStr);
         multipartFile.transferTo(file);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -155,7 +158,9 @@ public class MasterServiceImpl implements MasterService {
             Path path = Paths.get(master.getPhotoLink());
             Files.delete(path);
         }
-        master.setPhotoLink(file.getAbsolutePath());
+        log.info(pathStr);
+        log.info(file.getAbsolutePath());
+        master.setPhotoLink(pathStr);
         masterRepository.save(master);
 
         return file.getAbsolutePath();
