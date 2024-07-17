@@ -21,6 +21,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<?> handleNullPointerException(NullPointerException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NO_CONTENT);
+    }
+
     @ExceptionHandler(InvalidPinException.class)
     public ResponseEntity<?> handleInvalidPinException(InvalidPinException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);

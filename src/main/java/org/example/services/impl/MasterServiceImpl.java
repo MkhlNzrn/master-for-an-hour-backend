@@ -4,7 +4,9 @@ package org.example.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.*;
+
 import java.util.*;
+
 import org.example.exceptions.*;
 import org.example.pojo.*;
 import org.example.repositories.*;
@@ -148,15 +150,14 @@ public class MasterServiceImpl implements MasterService {
         multipartFile.transferTo(file);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        if (!Objects.equals(email, "anonymousUser") && email != null) {
-            Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
-            if (!master.getPhotoLink().isEmpty()) {
-                Path path = Paths.get(master.getPhotoLink());
-                Files.delete(path);
-            }
-            master.setPhotoLink(file.getAbsolutePath());
-            masterRepository.save(master);
+        Master master = masterRepository.findByEmail(email).orElseThrow(() -> new MasterNotFoundException(email));
+        if (!master.getPhotoLink().isEmpty()) {
+            Path path = Paths.get(master.getPhotoLink());
+            Files.delete(path);
         }
+        master.setPhotoLink(file.getAbsolutePath());
+        masterRepository.save(master);
+
         return file.getAbsolutePath();
     }
 
@@ -268,7 +269,7 @@ public class MasterServiceImpl implements MasterService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by id: " + id));
         Master master = masterRepository.findByUser(user)
                 .orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
-        if (master.getPhotoLink() == null) return null;
+        if (master.getPhotoLink() == null) throw new NullPointerException("Photo link is null");
         File file = new File(master.getPhotoLink());
         return new FileInputStream(file);
     }
@@ -294,8 +295,7 @@ public class MasterServiceImpl implements MasterService {
         EmailPin emailPin = emailsPinsRepository.findByEmail(email).orElseThrow(() -> new EmailPinNotFoundException(email));
         if (emailPin.getPin() == pin) {
             emailsPinsRepository.delete(emailPin);
-        }
-        else throw new InvalidPinException(pin);
+        } else throw new InvalidPinException(pin);
     }
 
     @Override
@@ -306,7 +306,8 @@ public class MasterServiceImpl implements MasterService {
                 .orElseThrow(() -> new MasterNotFoundException(user.getUsername()));
         Task task = taskRepository.findById(bidDTO.getTaskId())
                 .orElseThrow(() -> new TaskNotFoundException(bidDTO.getTaskId()));
-        if (bidRepository.existsByMasterAndTask(master,task)) throw new BidAlreadyExistsException(bidDTO.getUserId(), bidDTO.getTaskId());
+        if (bidRepository.existsByMasterAndTask(master, task))
+            throw new BidAlreadyExistsException(bidDTO.getUserId(), bidDTO.getTaskId());
         return bidRepository.save(new Bid(bidDTO.getDateStart(), bidDTO.getDateEnd(), bidDTO.getPrice(), task, master)).getId();
     }
 
