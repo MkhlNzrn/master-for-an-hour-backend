@@ -26,6 +26,6 @@ public interface MasterRepository extends JpaRepository<Master, Long> {
 
     Optional<Master> findByUser(User user);
 
-    @Query("UPDATE Master m SET m.photoLink = :photoLink WHERE m.email = :email")
+    @Query(value = "UPDATE masters m SET m.photo_link = ?2 WHERE m.email = ?1", nativeQuery = true)
     void updateByEmail(String email, String photoLink);
 }
