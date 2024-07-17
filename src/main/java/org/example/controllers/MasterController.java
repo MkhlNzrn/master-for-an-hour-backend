@@ -98,8 +98,8 @@ public class MasterController {
     }
 
 
-    @GetMapping("/photo/{key}")
-    public ResponseEntity<InputStreamResource> getPhoto(@PathVariable String key) throws MalformedURLException, FileNotFoundException {
+    @GetMapping("/photo/key")
+    public ResponseEntity<InputStreamResource> getPhoto(@RequestParam String key) throws MalformedURLException, FileNotFoundException {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("image/jpeg"))
                 .body(new InputStreamResource(masterService.getPhoto(key)));
