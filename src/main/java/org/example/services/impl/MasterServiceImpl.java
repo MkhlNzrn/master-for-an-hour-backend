@@ -145,26 +145,26 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public String uploadPhoto(MultipartFile multipartFile, String username) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            Master master = masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username));
-            if (master.getPhotoAdded()) {
-                Path path = Path.of(master.getPhotoLink());
-                Files.delete(path);
-            }
-            Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
-            File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
-            multipartFile.transferTo(file);
-            master.setPhotoLink(file.getAbsolutePath());
-            master.setPhotoAdded(true);
-            masterRepository.save(master);
-            return file.getAbsolutePath();
-        } else {
-            Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
-            File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
-            multipartFile.transferTo(file);
-            return file.getAbsolutePath();
+        Master master = masterRepository.findByEmail(username).orElseThrow(() -> new MasterNotFoundException(username));
+        if (master.getPhotoAdded()) {
+            Path path = Path.of(master.getPhotoLink());
+            Files.delete(path);
         }
+        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
+        File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(file);
+        master.setPhotoLink(file.getAbsolutePath());
+        master.setPhotoAdded(true);
+        masterRepository.save(master);
+        return file.getAbsolutePath();
+    }
+
+    @Override
+    public String uploadPhotoReg(MultipartFile multipartFile, String username) throws IOException {
+        Files.createDirectories(Paths.get(PATH_TO_MEDIA + username + "/photo/"));
+        File file = new File(PATH_TO_MEDIA + username + "/photo/" + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(file);
+        return file.getAbsolutePath();
     }
 
     private MasterDTO convertToDTO(Master master) {
