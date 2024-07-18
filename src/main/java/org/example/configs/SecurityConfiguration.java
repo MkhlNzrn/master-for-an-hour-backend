@@ -46,7 +46,6 @@ public class SecurityConfiguration {
                                 "/admin/access-requests", "/admin/accept/{id}", "/admin/verify/{id}", "/admin/discard/{id}", "/categories/{id}", "/categories/",
                                 "/clients/bid/{id}", "/clients/bids/task/{id}",
                                 "/masters/",
-                                "/masters/{id}/photo",
                                 "/tasks/{id}", "/tasks/user/{id}").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/masters/bid", "/masters/full/{id}").hasRole("MASTER")
