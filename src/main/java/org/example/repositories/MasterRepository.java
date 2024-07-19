@@ -26,6 +26,8 @@ public interface MasterRepository extends JpaRepository<Master, Long> {
 
     Optional<Master> findByUser(User user);
 
+    @Query(value = "select * from masters where user_id = ?1", nativeQuery = true)
+    Optional<Master> findByUserId(Long id);
 
     @Query("SELECT m FROM Master m ORDER BY m.rate DESC")
     List<Master> findTop10ByOrderByRateDesc(Pageable pageable);

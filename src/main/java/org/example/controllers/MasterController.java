@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.pojo.BidDTO;
-import org.example.pojo.GetFeedbackResponse;
-import org.example.pojo.MasterDTO;
-import org.example.pojo.MasterInfoDTO;
+import org.example.pojo.*;
 import org.example.services.MasterService;
 import org.example.wrappers.PathSet;
 import org.springframework.core.io.InputStreamResource;
@@ -111,6 +108,10 @@ public class MasterController {
         return ResponseEntity.ok(topMasters);
     }
 
+    @PatchMapping("/{id}/change")
+    public ResponseEntity<Long> changeMaster(@PathVariable Long id, @RequestBody ChangeMasterDTO masterDTO) {
+        return ResponseEntity.ok(masterService.changeMaster(id, masterDTO));
+    }
 
     @GetMapping("/{id}/feedbacks")
     public ResponseEntity<List<GetFeedbackResponse>> getFeedbacks(@PathVariable Long id) {
