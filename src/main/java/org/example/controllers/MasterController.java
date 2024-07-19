@@ -108,11 +108,6 @@ public class MasterController {
         return ResponseEntity.ok(topMasters);
     }
 
-    @PatchMapping("/{id}/change")
-    public ResponseEntity<Long> changeMaster(@PathVariable Long id, @RequestBody ChangeMasterDTO masterDTO) {
-        return ResponseEntity.ok(masterService.changeMaster(id, masterDTO));
-    }
-
     @GetMapping("/{id}/feedbacks")
     public ResponseEntity<List<GetFeedbackResponse>> getFeedbacks(@PathVariable Long id) {
         return ResponseEntity.ok(masterService.getFeedbacks(id));

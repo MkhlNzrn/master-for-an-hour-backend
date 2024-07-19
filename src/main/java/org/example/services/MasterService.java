@@ -58,6 +58,4 @@ public interface MasterService {
     Long verifyDocks(Long id);
 
     List<GetFeedbackResponse> getFeedbacks(Long id);
-
-    Long changeMaster(Long id, ChangeMasterDTO masterDTO);
 }

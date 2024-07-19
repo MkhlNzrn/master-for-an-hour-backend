@@ -2,13 +2,12 @@ package org.example.pojo;
 
 import lombok.Builder;
 import lombok.Data;
-import org.example.entities.Document;
 
 import java.util.List;
 
 @Data
 @Builder
-public class ChangeMasterDTO {
+public class ChangeProfileDTO {
 
     private String metroStation;
 

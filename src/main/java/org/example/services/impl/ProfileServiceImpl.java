@@ -5,16 +5,17 @@ import org.example.entities.Client;
 import org.example.entities.Master;
 import org.example.entities.User;
 import org.example.entities.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.example.exceptions.CategoryNotFoundException;
 import org.example.exceptions.ClientNotFoundException;
 import org.example.exceptions.InvalidRoleException;
 import org.example.exceptions.MasterNotFoundException;
+import org.example.pojo.ChangeProfileDTO;
 import org.example.pojo.ProfileDTO;
-import org.example.repositories.ClientRepository;
-import org.example.repositories.DocumentRepository;
-import org.example.repositories.MasterRepository;
-import org.example.repositories.UserRepository;
+import org.example.repositories.*;
 import org.example.services.ProfileService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class ProfileServiceImpl implements ProfileService {
     private final MasterRepository masterRepository;
     private final DocumentRepository documentRepository;
     private final ClientRepository clientRepository;
+    private final CategoryRepository categoryRepository;
+
 
     @Override
     public ProfileDTO getProfileInfo(Long id) {
@@ -39,7 +42,7 @@ public class ProfileServiceImpl implements ProfileService {
                     .id(master.getId())
                     .firstName(master.getFirstName())
                     .middleName(master.getMiddleName())
-.categories(convertCategoriesToString(master.getCategories()))
+                    .categories(convertCategoriesToString(master.getCategories()))
                     .lastName(master.getLastName())
                     .metroStation(master.getMetroStation())
                     .description(master.getDescription())
@@ -70,11 +73,63 @@ public class ProfileServiceImpl implements ProfileService {
         }
     }
 
-private List<String> convertCategoriesToString(List<Category> categories) {
+    @Override
+    public Long changeProfile(Long id, ChangeProfileDTO profileDTO) {  //TODO: refactor
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (user.getRole().name().equals("ROLE_MASTER")) {
+            Master profile = masterRepository.findByUserId(id)
+                    .orElseThrow(() -> new MasterNotFoundException(id));
+            if (!profileDTO.getEmail().isEmpty() && !profileDTO.getEmail().equals(profile.getEmail())) {
+                profile.setEmail(profileDTO.getEmail());
+                user.setUsername(profileDTO.getEmail());
+                userRepository.save(user);
+            }
+            if (!profileDTO.getTelegramTag().isEmpty() && !profileDTO.getTelegramTag().equals(profile.getTelegramTag()))
+                profile.setTelegramTag(profileDTO.getTelegramTag());
+            if (!profileDTO.getPhoneNumber().isEmpty() && !profileDTO.getPhoneNumber().equals(profile.getPhoneNumber()))
+                profile.setPhoneNumber(profileDTO.getPhoneNumber());
+            if (profile.getUser().getRole().name().equals("ROLE_MASTER")) {
+                if (!profileDTO.getDescription().isEmpty() && !profileDTO.getDescription().equals(profile.getDescription()))
+                    profile.setDescription(profileDTO.getDescription());
+                if (!profileDTO.getCategories().isEmpty() && !profileDTO.getCategories().equals(convertCategoriesToString(profile.getCategories())))
+                    profile.setCategories(convertStringsToCategories(profileDTO.getCategories()));
+                if (!profileDTO.getMetroStation().isEmpty() && !profileDTO.getMetroStation().equals(profile.getMetroStation()))
+                    profile.setMetroStation(profileDTO.getMetroStation());
+            }
+            return masterRepository.save(profile).getUser().getId();
+        } else if (user.getRole().name().equals("ROLE_CLIENT")) {
+            Client profile = clientRepository.findByUserId(id)
+                    .orElseThrow(() -> new ClientNotFoundException(id));
+            if (!profileDTO.getEmail().isEmpty() && !profileDTO.getEmail().equals(profile.getEmail())) {
+                profile.setEmail(profileDTO.getEmail());
+                user.setUsername(profileDTO.getEmail());
+                userRepository.save(user);
+            }
+            if (!profileDTO.getTelegramTag().isEmpty() && !profileDTO.getTelegramTag().equals(profile.getTelegramTag()))
+                profile.setTelegramTag(profileDTO.getTelegramTag());
+            if (!profileDTO.getPhoneNumber().isEmpty() && !profileDTO.getPhoneNumber().equals(profile.getPhoneNumber()))
+                profile.setPhoneNumber(profileDTO.getPhoneNumber());
+            return clientRepository.save(profile).getUser().getId();
+        } else {
+            throw new InvalidRoleException(user.getRole().name());
+        }
+    }
+
+    private List<String> convertCategoriesToString(List<Category> categories) {
         List<String> stringCategories = new ArrayList<>();
         for (Category category : categories) {
             stringCategories.add(category.getName());
         }
         return stringCategories;
+    }
+
+    private List<Category> convertStringsToCategories(List<String> stringCategories) {
+        List<Category> categories = new ArrayList<>();
+        for (String categoryName : stringCategories) {
+            categories.add(categoryRepository.findByName(categoryName)
+                    .orElseThrow(() -> new CategoryNotFoundException(categoryName)));
+        }
+        return categories;
     }
 }

@@ -361,28 +361,6 @@ public class MasterServiceImpl implements MasterService {
         return feedbacks;
     }
 
-    @Override
-    public Long changeMaster(Long id, ChangeMasterDTO masterDTO) {
-        Master master = masterRepository.findByUserId(id).orElseThrow(() -> new MasterNotFoundException(id));
-        if (!masterDTO.getDescription().isEmpty() && !masterDTO.getDescription().equals(master.getDescription()))
-            master.setDescription(masterDTO.getDescription());
-        if (!masterDTO.getCategories().isEmpty() && !masterDTO.getCategories().equals(convertCategoriesToString(master.getCategories())))
-            master.setCategories(convertStringsToCategories(masterDTO.getCategories()));
-        if (!masterDTO.getEmail().isEmpty() && !masterDTO.getEmail().equals(master.getEmail())){
-            master.setEmail(masterDTO.getEmail());
-            User user = master.getUser();
-            user.setUsername(masterDTO.getEmail());
-            userRepository.save(user);
-        }
-        if (!masterDTO.getTelegramTag().isEmpty() && !masterDTO.getTelegramTag().equals(master.getTelegramTag()))
-            master.setTelegramTag(masterDTO.getTelegramTag());
-        if (!masterDTO.getPhoneNumber().isEmpty() && !masterDTO.getPhoneNumber().equals(master.getPhoneNumber()))
-            master.setPhoneNumber(masterDTO.getPhoneNumber());
-        if (!masterDTO.getMetroStation().isEmpty() && !masterDTO.getMetroStation().equals(master.getMetroStation()))
-            master.setMetroStation(masterDTO.getMetroStation());
-        return masterRepository.save(master).getId();
-    }
-
     private void deleteMediaByUsername(String username) throws IOException {
         File directory = new File(PATH_TO_MEDIA + username);
         FileUtils.deleteDirectory(directory);
