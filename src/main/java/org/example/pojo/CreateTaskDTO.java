@@ -11,6 +11,8 @@ public class CreateTaskDTO {
 
     private String description;
 
+    private Long maxPrice;
+
     private Date startDate;
 
     private Date endDate;

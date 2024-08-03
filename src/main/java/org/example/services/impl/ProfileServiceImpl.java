@@ -9,10 +9,7 @@ import org.example.entities.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.example.exceptions.CategoryNotFoundException;
-import org.example.exceptions.ClientNotFoundException;
-import org.example.exceptions.InvalidRoleException;
-import org.example.exceptions.MasterNotFoundException;
+import org.example.exceptions.*;
 import org.example.pojo.ChangeProfileDTO;
 import org.example.pojo.ProfileDTO;
 import org.example.repositories.*;
@@ -29,6 +26,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final DocumentRepository documentRepository;
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
+    private final MetroStationRepository metroStationRepository;
 
 
     @Override
@@ -44,7 +42,7 @@ public class ProfileServiceImpl implements ProfileService {
                     .middleName(master.getMiddleName())
                     .categories(convertCategoriesToString(master.getCategories()))
                     .lastName(master.getLastName())
-                    .metroStation(master.getMetroStation())
+                    .metroStation(convertMetroStationsToString(master.getMetroStation()))
                     .description(master.getDescription())
                     .email(master.getEmail())
                     .age(master.getAge())
@@ -95,7 +93,7 @@ public class ProfileServiceImpl implements ProfileService {
                 if (!profileDTO.getCategories().isEmpty() && !profileDTO.getCategories().equals(convertCategoriesToString(profile.getCategories())))
                     profile.setCategories(convertStringsToCategories(profileDTO.getCategories()));
                 if (!profileDTO.getMetroStation().isEmpty() && !profileDTO.getMetroStation().equals(profile.getMetroStation()))
-                    profile.setMetroStation(profileDTO.getMetroStation());
+                    profile.setMetroStation(convertStringsToMetroStations(profileDTO.getMetroStation()));
             }
             return masterRepository.save(profile).getUser().getId();
         } else if (user.getRole().name().equals("ROLE_CLIENT")) {
@@ -131,5 +129,21 @@ public class ProfileServiceImpl implements ProfileService {
                     .orElseThrow(() -> new CategoryNotFoundException(categoryName)));
         }
         return categories;
+    }
+
+    private List<MetroStation> convertStringsToMetroStations(List<String> stringMetroStations) {
+        List<MetroStation> metroStations = new ArrayList<>();
+        for (String metroStation : stringMetroStations) {
+            metroStations.add(metroStationRepository.findByName(metroStation).orElseThrow(() -> new MetroStationNotFoundException(metroStation)));
+        }
+        return metroStations;
+    }
+
+    private List<String> convertMetroStationsToString(List<MetroStation> metroStations) {
+        List<String> stringMetroStations = new ArrayList<>();
+        for (MetroStation metroStation : metroStations) {
+            stringMetroStations.add(metroStation.getName());
+        }
+        return stringMetroStations;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class ChangeProfileDTO {
 
-    private String metroStation;
+    private List<String> metroStation;
 
     private String email;
 

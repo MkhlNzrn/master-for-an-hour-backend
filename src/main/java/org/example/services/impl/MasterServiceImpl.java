@@ -47,6 +47,7 @@ public class MasterServiceImpl implements MasterService {
     private final BidRepository bidRepository;
     private final TaskRepository taskRepository;
     private final CategoryRepository categoryRepository;
+    private final MetroStationRepository metroStationRepository;
 
     @Value("${media.documents.limit.count}")
     private int DOCUMENTS_COUNT_LIMIT;
@@ -80,7 +81,7 @@ public class MasterServiceImpl implements MasterService {
                 .firstName(master.getFirstName())
                 .middleName(master.getMiddleName())
                 .lastName(master.getLastName())
-                .metroStation(master.getMetroStation())
+                .metroStation(convertMetroStationsToString(master.getMetroStation()))
                 .description(master.getDescription())
                 .age(master.getAge())
                 .categories(convertCategoriesToString(master.getCategories()))
@@ -177,7 +178,7 @@ public class MasterServiceImpl implements MasterService {
                 .firstName(master.getFirstName())
                 .middleName(master.getMiddleName())
                 .lastName(master.getLastName())
-                .metroStation(master.getMetroStation())
+                .metroStation(convertMetroStationsToString(master.getMetroStation()))
                 .email(master.getEmail())
                 .phoneNumber(master.getPhoneNumber())
                 .telegramTag(master.getTelegramTag())
@@ -212,7 +213,7 @@ public class MasterServiceImpl implements MasterService {
                         request.getLastName(),
                         request.getEmail(),
                         false,
-                        request.getMetroStation(),
+                        convertStringsToMetroStations(request.getMetroStations()),
                         request.getPhoneNumber(),
                         request.getTelegramTag(),
                         request.getDescription(),
@@ -291,13 +292,29 @@ public class MasterServiceImpl implements MasterService {
         }
         return stringCategories;
     }
-
     private List<Category> convertStringsToCategories(List<String> stringCategories) {
         List<Category> categories = new ArrayList<>();
         for (String categoryName : stringCategories) {
             categories.add(categoryRepository.findByName(categoryName).orElseThrow(() -> new CategoryNotFoundException(categoryName)));
         }
         return categories;
+    }
+
+
+    private List<MetroStation> convertStringsToMetroStations(List<String> stringMetroStations) {
+        List<MetroStation> metroStations = new ArrayList<>();
+        for (String metroStation : stringMetroStations) {
+            metroStations.add(metroStationRepository.findByName(metroStation).orElseThrow(() -> new MetroStationNotFoundException(metroStation)));
+        }
+        return metroStations;
+    }
+
+    private List<String> convertMetroStationsToString(List<MetroStation> metroStations) {
+        List<String> stringMetroStations = new ArrayList<>();
+        for (MetroStation metroStation : metroStations) {
+            stringMetroStations.add(metroStation.getName());
+        }
+        return stringMetroStations;
     }
 
     @Override

@@ -27,9 +27,6 @@ public class Master {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "metro_station", nullable = false)
-    private String metroStation;
-
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -54,6 +51,9 @@ public class Master {
     @Column(name = "photo_added")
     private Boolean photoAdded;
 
+    @OneToMany
+    private List<MetroStation> metroStation;
+
     @Column(name = "is_accepted")
     private Boolean isAccepted;
 
@@ -67,7 +67,7 @@ public class Master {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Master(String firstName, List<Category> categories,  String middleName, String lastName, String email, Boolean isAccepted, String metroStation, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, User user) {
+    public Master(String firstName, List<Category> categories,  String middleName, String lastName, String email, Boolean isAccepted, List<MetroStation> metroStation, String phoneNumber, String telegramTag, String description, byte age, float rate, String photoLink, User user) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;

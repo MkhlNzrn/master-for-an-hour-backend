@@ -40,6 +40,9 @@ public class Task {
     @Column(name = "price")
     private Long price;
 
+    @Column(name = "max_price")
+    private Long maxPrice;
+
     @ManyToOne
     private User client;
 
@@ -49,7 +52,7 @@ public class Task {
     @ManyToOne
     private Category category;
 
-    public Task(String description, Category category, Date startDate, Date endDate, User client) {
+    public Task(String description, Category category, Date startDate, Date endDate, User client, Long maxPrice) {
         this.description = description;
         this.category = category;
         this.startDate = startDate;
@@ -59,5 +62,6 @@ public class Task {
         this.rate = null;
         this.feedback = null;
         this.price = null;
+        this.maxPrice = maxPrice;
     }
 }

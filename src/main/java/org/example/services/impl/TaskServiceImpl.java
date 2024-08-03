@@ -50,7 +50,8 @@ public class TaskServiceImpl implements TaskService {
                 category, taskDTO.getStartDate(),
                 taskDTO.getEndDate(),
                 userRepository.findById(taskDTO.getUserId())
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found by ID: " + taskDTO.getUserId())));
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found by ID: " + taskDTO.getUserId())),
+                taskDTO.getMaxPrice());
         return taskRepository.save(task).getId();
     }
 
@@ -80,6 +81,8 @@ public class TaskServiceImpl implements TaskService {
             task.setFeedback(taskDTO.getFeedback());
         if (taskDTO.getRate() != null && !taskDTO.getRate().equals(task.getRate()))
             task.setRate(taskDTO.getRate());
+        if (taskDTO.getMaxPrice() != null && !taskDTO.getMaxPrice().equals(task.getPrice()))
+            task.setMaxPrice(taskDTO.getMaxPrice());
         taskRepository.save(task);
         return task.getId();
     }
@@ -165,6 +168,7 @@ public class TaskServiceImpl implements TaskService {
                 .categoryName(task.getCategory().getName())
                 .userId(task.getClient().getId())
                 .userName(task.getClient().getFirstName())
+                .maxPrice(task.getMaxPrice())
                 .clientEmail(client.getEmail())
                 .clientPhoneNumber(client.getPhoneNumber())
                 .clientTelegramTag(client.getTelegramTag())

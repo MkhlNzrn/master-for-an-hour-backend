@@ -18,7 +18,7 @@ public class MasterDTO {
 
     private String lastName;
 
-    private String metroStation;
+    private List<String> metroStation;
 
     private String email;
 

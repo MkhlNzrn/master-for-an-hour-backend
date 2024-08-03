@@ -26,5 +26,7 @@ public class UpdateTaskDTO {
 
     private Boolean isCompleted;
 
+    private Long maxPrice;
+
     private String categoryName;
 }

@@ -27,6 +27,8 @@ public class TaskDTO {
 
     private Long categoryId;
 
+    private Long maxPrice;
+
     private String categoryName;
 
     private Long userId;
