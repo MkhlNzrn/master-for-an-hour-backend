@@ -3,7 +3,9 @@ package org.example.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.example.entities.Category;
 import org.example.entities.Task;
+import org.example.exceptions.NoCategoriesFoundException;
 import org.example.pojo.CreateTaskDTO;
 import org.example.pojo.SendFeedbackDTO;
 import org.example.pojo.TaskDTO;
@@ -48,6 +50,12 @@ public class TaskController {
     @GetMapping("/category/{id}")
     public ResponseEntity<List<TaskDTO>> getTasksByCategoryId(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTasksByCategoryId(id));
+    }
+
+    @Operation(description = "Get Tasks by CategoryIds")
+    @GetMapping("/category/list")
+    public ResponseEntity<List<TaskDTO>> getCategoryByIds(@RequestParam List<Long> categoryIds) {
+        return ResponseEntity.ok(taskService.getAllTasksByCategoryIds(categoryIds));
     }
 
     @Operation(description = "Search tasks by Client's UserId")

@@ -32,4 +32,6 @@ public interface TaskService {
     Long markAsCompleted(Long id);
 
     Long sendFeedback(SendFeedbackDTO sendFeedbackDTO);
+
+    List<TaskDTO> getAllTasksByCategoryIds(List<Long> ids);
 }

@@ -131,6 +131,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TaskDTO> getAllTasksByCategoryIds(List<Long> ids) {
+        return taskRepository.findAllByCategoryIdsIn(ids).stream().map(this::convertToDTO).toList();
+    }
+
+    @Override
     public List<TaskDTO> getAllTasksByMastersUserId(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by Id: " + id));

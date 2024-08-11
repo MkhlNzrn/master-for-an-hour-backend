@@ -35,14 +35,6 @@ public class CategoryController {
         return ResponseEntity.ok(categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id)));
     }
 
-    @Operation(description = "Get Category by Ids")
-    @GetMapping("/list")
-    public ResponseEntity<List<Category>> getCategoryByIds(@RequestParam List<Long> ids) {
-        List<Category> categories = categoryRepository.findAllByIdIn(ids);
-        if (categories.isEmpty()) throw new NoCategoriesFoundException();
-        return ResponseEntity.ok(categories);
-    }
-
     @Operation(description = "Delete Category by Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteCategoryById(@PathVariable Long id) {
