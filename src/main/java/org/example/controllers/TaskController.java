@@ -53,7 +53,7 @@ public class TaskController {
     }
 
     @Operation(description = "Get Tasks by CategoryIds")
-    @GetMapping("/category/list")
+    @PostMapping("/category/list")
     public ResponseEntity<List<TaskDTO>> getCategoryByIds(@RequestParam List<Long> categoryIds) {
         return ResponseEntity.ok(taskService.getAllTasksByCategoryIds(categoryIds));
     }
