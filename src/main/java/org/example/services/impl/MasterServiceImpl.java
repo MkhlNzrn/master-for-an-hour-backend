@@ -100,7 +100,7 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public List<String> getMetroStations() {
-        return METRO_STATIONS;
+        return convertMetroStationsToString(metroStationRepository.findAll());
     }
 
     @Override
