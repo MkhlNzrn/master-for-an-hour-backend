@@ -99,6 +99,13 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
+    public Page<MasterDTO> getAllNonVerifiedMasters(Pageable pageable) {
+        Page<Master> masters = masterRepository.findAllByIsVerifiedByDocksFalse(pageable);
+        if (masters.isEmpty()) throw new NoMastersFoundException();
+        return masters.map(this::convertToDTO);
+    }
+
+    @Override
     public List<String> getMetroStations() {
         return convertMetroStationsToString(metroStationRepository.findAll());
     }

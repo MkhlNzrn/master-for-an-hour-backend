@@ -5,13 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.example.entities.*;
 import org.example.exceptions.BidNotFoundException;
 import org.example.exceptions.ClientNotFoundException;
+import org.example.exceptions.NoMastersFoundException;
 import org.example.exceptions.TaskNotFoundException;
+import org.example.pojo.MasterDTO;
 import org.example.pojo.SignUpRequest;
 import org.example.repositories.BidRepository;
 import org.example.repositories.ClientRepository;
 import org.example.repositories.TaskRepository;
 import org.example.repositories.UserRepository;
 import org.example.services.ClientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +38,13 @@ public class ClientServiceImpl implements ClientService {
                 user
         );
         return clientRepository.save(client).getId();
+    }
+
+    @Override
+    public Page<Client> getAllClients(Pageable pageable) {
+        Page<Client> clients = clientRepository.findAllClientsPage(pageable);
+        if (clients.isEmpty()) throw new NoMastersFoundException();
+        return clients;
     }
 
     @Override

@@ -31,4 +31,6 @@ public interface MasterRepository extends JpaRepository<Master, Long> {
 
     @Query("SELECT m FROM Master m ORDER BY m.rate DESC")
     List<Master> findTop10ByOrderByRateDesc(Pageable pageable);
+
+    Page<Master> findAllByIsVerifiedByDocksFalse(Pageable pageable);
 }

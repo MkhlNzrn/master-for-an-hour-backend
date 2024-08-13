@@ -3,6 +3,8 @@ package org.example.repositories;
 import org.example.entities.Client;
 import org.example.entities.Master;
 import org.example.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,4 +18,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query(value = "select * from clients where user_id = ?1", nativeQuery = true)
     Optional<Client> findByUserId(Long id);
+
+    @Query("SELECT c FROM Client c")
+    Page<Client> findAllClientsPage(Pageable pageable);
 }

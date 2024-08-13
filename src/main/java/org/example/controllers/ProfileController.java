@@ -26,7 +26,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/{id}/change")
-    public ResponseEntity<Long> changeMaster(@PathVariable Long id, @RequestBody ChangeProfileDTO changeProfileDTO) {
+    public ResponseEntity<Long> changeProfile(@PathVariable Long id, @RequestBody ChangeProfileDTO changeProfileDTO) {
         return ResponseEntity.ok(profileService.changeProfile(id, changeProfileDTO));
     }
 

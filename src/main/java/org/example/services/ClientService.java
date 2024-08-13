@@ -1,8 +1,11 @@
 package org.example.services;
 
 import org.example.entities.Bid;
+import org.example.entities.Client;
 import org.example.entities.User;
 import org.example.pojo.SignUpRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,4 +19,6 @@ public interface ClientService {
      Long chooseBid(Long id);
 
      List<Bid> getAllBids(Long id);
+
+     Page<Client> getAllClients(Pageable pageable);
 }

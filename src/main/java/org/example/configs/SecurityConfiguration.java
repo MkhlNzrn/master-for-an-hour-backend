@@ -47,10 +47,10 @@ public class SecurityConfiguration {
                                 "/clients/bid/{id}", "/clients/bids/task/{id}",
                                 "/masters/",
                                 "/tasks/{id}", "/tasks/user/{id}").authenticated()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        //.requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/masters/bid", "/masters/full/{id}").hasRole("MASTER")
                         .requestMatchers("/tasks/{id}/complete").hasRole("CLIENT")
-                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**", "/admin", "/admin/access-requests").permitAll()
                         .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

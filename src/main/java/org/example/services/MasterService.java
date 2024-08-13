@@ -25,6 +25,8 @@ public interface MasterService {
 
     Page<MasterDTO> getAllMasters(Pageable pageable);
 
+    Page<MasterDTO> getAllNonVerifiedMasters(Pageable pageable);
+
     List<String> getMetroStations();
 
     String uploadPhotoReg(MultipartFile multipartFile, String username) throws IOException;
