@@ -8,9 +8,12 @@ import org.example.exceptions.CategoryAlreadyExistsException;
 import org.example.exceptions.CategoryNotFoundException;
 import org.example.exceptions.NoCategoriesFoundException;
 import org.example.repositories.CategoryRepository;
+import org.example.services.impl.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,6 +23,7 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Operation(description = "Get all Categories")
     @GetMapping
@@ -27,6 +31,19 @@ public class CategoryController {
         List<Category> categories = categoryRepository.findAll();
         if (categories.isEmpty()) throw new NoCategoriesFoundException();
         return ResponseEntity.ok(categories);
+    }
+
+    @Operation(description = "Get all Categories")
+    @GetMapping("/main")
+    public ResponseEntity<List<Category>> getAllMainCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        if (categories.isEmpty()) throw new NoCategoriesFoundException();
+        return ResponseEntity.ok(categories);
+    }
+
+    @PostMapping("/{id}/photo")
+    public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile multipartFile, @PathVariable Long id) throws IOException {
+        return ResponseEntity.ok(categoryService.uploadPhoto(multipartFile, id));
     }
 
     @Operation(description = "Get Category by Id")
