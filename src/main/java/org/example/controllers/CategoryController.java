@@ -33,7 +33,7 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
-    @Operation(description = "Get all Categories")
+    @Operation(description = "Get all main Categories (Пока только main категории)")
     @GetMapping("/main")
     public ResponseEntity<List<Category>> getAllMainCategories() {
         List<Category> categories = categoryRepository.findAll();
