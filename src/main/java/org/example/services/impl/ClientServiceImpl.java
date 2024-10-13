@@ -34,7 +34,7 @@ public class ClientServiceImpl implements ClientService {
                 signUpRequest.getFirstName(),
                 signUpRequest.getEmail(),
                 signUpRequest.getPhoneNumber(),
-                signUpRequest.getTelegramTag(),
+                signUpRequest.getTelegramTag() == null ? "" : signUpRequest.getTelegramTag(),
                 user
         );
         return clientRepository.save(client).getId();

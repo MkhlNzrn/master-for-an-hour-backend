@@ -222,7 +222,7 @@ public class MasterServiceImpl implements MasterService {
                         false,
                         convertStringsToMetroStations(request.getMetroStations()),
                         request.getPhoneNumber(),
-                        request.getTelegramTag(),
+                        request.getTelegramTag() == null ? "" : request.getTelegramTag(),
                         request.getDescription(),
                         request.getAge(),
                         request.getRate(),
