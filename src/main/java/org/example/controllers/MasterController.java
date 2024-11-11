@@ -118,4 +118,17 @@ public class MasterController {
     public ResponseEntity<Long> deleteMaster(@RequestParam String username) throws IOException {
         return ResponseEntity.ok(masterService.deleteMaster(username));
     }
+
+    @PatchMapping("/{id}/verification-comment")
+    public ResponseEntity<Long> addVerificationComment(@PathVariable Long id, @RequestParam String comment) {
+        return ResponseEntity.ok(masterService.addVerificationComment(id, comment));
+    }
+
+    @GetMapping("/show/{id}")
+    public ResponseEntity<byte[]> showFile(@PathVariable("id") Long id) throws IOException {
+        byte[] fileContent = masterService.getStaticFile(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(fileContent);
+    }
 }

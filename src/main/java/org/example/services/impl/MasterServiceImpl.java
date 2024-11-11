@@ -55,19 +55,6 @@ public class MasterServiceImpl implements MasterService {
     @Value("${media.path}")
     private String PATH_TO_MEDIA;
 
-
-    private final List<String> METRO_STATIONS = new ArrayList<>(Arrays.asList("Автово", "Адмиралтейская", "Академическая",
-            "Балтийская", "Бухарестская", "Василеостровская", "Владимирская", "Волковская", "Выборгская",
-            "Горьковская", "Гостиный двор", "Гражданский проспект", "Девяткино", "Достоевская", "Елизаровская",
-            "Звездная", "Звенигородская", "Кировский завод", "Комендантский проспект", "Крестовский остров",
-            "Купчино", "Ладожская", "Ленинский проспект", "Лесная", "Ломоносовская", "Маяковская", "Международная",
-            "Московская", "Московские ворота", "Нарвская", "Невский проспект", "Новочеркасская", "Обводной канал",
-            "Обухово", "Озерки", "Парк Победы", "Парнас", "Петроградская", "Пионерская", "Площадь Александра Невского-1",
-            "Площадь Александра Невского-2", "Площадь Восстания", "Площадь Ленина", "Площадь мужества", "Политехническая",
-            "Приморская", "Пролетарская", "Проспект Большевиков", "Проспект Ветеранов", "Проспект Просвещения", "Рыбацкое",
-            "Садовая", "Сенная площадь", "Спасская", "Спортивная", "Старая Деревня", "Технологический институт",
-            "Удельная", "Улица Дыбенко", "Фрунзенская", "Черная речка", "Чернышевская", "Чкаловская", "Электросила"));
-
     @Override
     public MasterDTO getMaster(Long id) {
         return convertToDTO(masterRepository.findById(id).orElseThrow(() -> new MasterNotFoundException(id)));
@@ -383,6 +370,22 @@ public class MasterServiceImpl implements MasterService {
             );
         }
         return feedbacks;
+    }
+
+    @Override
+    public Long addVerificationComment(Long id, String comment) {
+        Master master = masterRepository.findById(id)
+                .orElseThrow(() -> new MasterNotFoundException(id));
+        master.setVerificationComment(comment);
+        return masterRepository.save(master).getId();
+    }
+
+    @Override
+    public byte[] getStaticFile(Long id) throws IOException {
+        Master master = masterRepository.findById(id)
+                .orElseThrow(() -> new MasterNotFoundException(id));
+        Document document = documentRepository.findByMaster(master).get(0);
+        return Files.readAllBytes(Paths.get(document.getUrl()));
     }
 
     private void deleteMediaByUsername(String username) throws IOException {

@@ -60,4 +60,8 @@ public interface MasterService {
     Long verifyDocks(Long id);
 
     List<GetFeedbackResponse> getFeedbacks(Long id);
+
+    Long addVerificationComment(Long id, String comment);
+
+    byte[] getStaticFile(Long id) throws IOException;
 }

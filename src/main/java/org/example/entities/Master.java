@@ -48,6 +48,9 @@ public class Master {
     @Column(name = "photo_link")
     private String photoLink;
 
+    @Column(name = "document_link")
+    private String documentLink;
+
     @Column(name = "photo_added")
     private Boolean photoAdded;
 
@@ -56,6 +59,9 @@ public class Master {
 
     @Column(name = "is_accepted")
     private Boolean isAccepted;
+
+    @Column(name = "verification_comment")
+    private String verificationComment;
 
     @ManyToMany
     private List<Category> categories;
