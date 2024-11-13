@@ -4,9 +4,6 @@ package org.example.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.entities.*;
-
-import java.util.*;
-
 import org.example.exceptions.*;
 import org.example.pojo.*;
 import org.example.repositories.*;
@@ -18,8 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,14 +117,11 @@ public class MasterServiceImpl implements MasterService {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                String email = authentication.getName();
-                if (!Objects.equals(email, "anonymousUser") && email != null)
-                    documentRepository.save(
-                            new Document(multipartFile.getOriginalFilename(), PATH_TO_MEDIA, masterRepository.findByEmail(email)
-                                    .orElseThrow(() -> new MasterNotFoundException(email))
-                            )
-                    );
+                documentRepository.save(
+                        new Document(multipartFile.getOriginalFilename(), PATH_TO_MEDIA, masterRepository.findByEmail(username)
+                                .orElseThrow(() -> new MasterNotFoundException(username))
+                        )
+                );
                 paths.add(file.getAbsolutePath());
             });
             return paths;
@@ -163,7 +155,6 @@ public class MasterServiceImpl implements MasterService {
         masterRepository.save(master);
         return file.getAbsolutePath();
     }
-
 
 
     private MasterDTO convertToDTO(Master master) {
@@ -286,6 +277,7 @@ public class MasterServiceImpl implements MasterService {
         }
         return stringCategories;
     }
+
     private List<Category> convertStringsToCategories(List<String> stringCategories) {
         List<Category> categories = new ArrayList<>();
         for (String categoryName : stringCategories) {
