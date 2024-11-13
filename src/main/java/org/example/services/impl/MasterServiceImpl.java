@@ -118,7 +118,7 @@ public class MasterServiceImpl implements MasterService {
                     throw new RuntimeException(e);
                 }
                 documentRepository.save(
-                        new Document(multipartFile.getOriginalFilename(), PATH_TO_MEDIA, masterRepository.findByEmail(username)
+                        new Document(multipartFile.getOriginalFilename(), filePath, masterRepository.findByEmail(username)
                                 .orElseThrow(() -> new MasterNotFoundException(username))
                         )
                 );
