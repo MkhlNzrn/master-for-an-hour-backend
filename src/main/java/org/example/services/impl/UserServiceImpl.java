@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -70,10 +71,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Long setUserIsBanned(String username, boolean isBanned){
         var user = getByUsername(username);
-        user.setBanned(isBanned);
+        user.setIsBanned(isBanned);
         setTimeOfBan(user);
+
+        repository.save(user);
         return user.getId();
     }
 

@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 }))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
-                                "/admin/access-requests", "/admin/accept/{id}", "/admin/verify/{id}", "/admin/discard/{id}", "/categories/{id}", "/categories/", "/admin/ban-user",
+                                "/admin/access-requests", "/admin/accept/{id}", "/admin/verify/{id}", "/admin/discard/{id}", "/categories/{id}", "/categories/",
                                 "/clients/bid/{id}", "/clients/bids/task/{id}",
                                 "/masters/",
                                 "/tasks/{id}", "/tasks/user/{id}").authenticated()

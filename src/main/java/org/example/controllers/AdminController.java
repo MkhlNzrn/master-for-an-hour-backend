@@ -106,7 +106,7 @@ public class AdminController {
         return ResponseEntity.ok(taskService.updateTask(taskDTO));
     }
 
-    @Operation(description = "Ban user by id")
+    @Operation(description = "Ban user by username")
     @PatchMapping("/ban-user")
     public ResponseEntity<Long> banUser(@RequestParam String username, @RequestParam boolean isBanned) {
         return ResponseEntity.ok(userService.setUserIsBanned(username, isBanned));

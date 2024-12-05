@@ -38,8 +38,9 @@ public class User implements UserDetails {
 
     @Setter
     @Getter
-    @Column(name = "is_banned", nullable = false)
-    private boolean isBanned = false;
+    @NonNull
+    @Column(name = "is_banned")
+    private Boolean isBanned = false;
 
     @Setter
     @Getter
