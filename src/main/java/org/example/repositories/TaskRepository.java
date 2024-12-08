@@ -17,6 +17,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query(value = "select t from Task t order by t.id desc")
     Page<Task> findAllTasksPage(Pageable pageable);
 
+    @Query(value = "select t from Task t where t.master is null order by t.id desc")
+    Page<Task> findAllUncompletedTasksPage(Pageable pageable);
+
     @Query(value = "select t from Task t where t.category = ?1 order by t.id desc")
     List<Task> findAllByCategory(Category category);
 

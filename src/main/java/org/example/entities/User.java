@@ -6,6 +6,8 @@ import org.example.enums.ERole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +35,16 @@ public class User implements UserDetails {
 
     @Column(name = "role", nullable = false)
     private ERole role;
+
+    @Setter
+    @Getter
+    @Column(name = "is_banned", nullable = false)
+    private Boolean isBanned = Boolean.FALSE;
+
+    @Setter
+    @Getter
+    @Column(name="ban_date")
+    private String banDate = null;
 
     public User(String username, String email, String password, ERole role) {
         super();

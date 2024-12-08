@@ -30,7 +30,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TaskDTO> getTasks(Pageable pageable) {
-        Page<Task> tasks = taskRepository.findAllTasksPage(pageable);
+        Page<Task> tasks = taskRepository.findAllUncompletedTasksPage(pageable);
         if (tasks.isEmpty()) throw new NoTasksFoundException();
         return tasks.map(this::convertToDTO);
     }

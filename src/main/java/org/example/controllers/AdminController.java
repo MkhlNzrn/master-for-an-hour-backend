@@ -12,10 +12,7 @@ import org.example.pojo.MasterDTO;
 import org.example.pojo.TaskDTO;
 import org.example.pojo.UpdateTaskDTO;
 import org.example.repositories.MasterRepository;
-import org.example.services.ClientService;
-import org.example.services.MasterService;
-import org.example.services.ProfileService;
-import org.example.services.TaskService;
+import org.example.services.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +32,7 @@ public class AdminController {
     private final ProfileService profileService;
     private final MasterRepository masterRepository;
     private final ClientService clientService;
+    private final UserService userService;
 
     @Operation(description = "Show all Master account access requests")
     @GetMapping("/access-requests")
@@ -107,4 +105,11 @@ public class AdminController {
     public ResponseEntity<Long> updateTask(@RequestBody UpdateTaskDTO taskDTO) {
         return ResponseEntity.ok(taskService.updateTask(taskDTO));
     }
+
+    @Operation(description = "Ban user by username")
+    @PatchMapping("/ban-user")
+    public ResponseEntity<Long> banUser(@RequestParam String username, @RequestParam boolean isBanned) {
+        return ResponseEntity.ok(userService.setUserIsBanned(username, isBanned));
+    }
+
 }

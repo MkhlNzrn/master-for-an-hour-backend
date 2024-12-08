@@ -13,4 +13,5 @@ public interface UserService {
     User getCurrentUser();
     boolean userExists(String username);
     void deleteByEmail(String username);
+    Long setUserIsBanned(String username, boolean isBanned);
 }
