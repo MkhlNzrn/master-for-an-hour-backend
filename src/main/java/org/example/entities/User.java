@@ -46,12 +46,14 @@ public class User implements UserDetails {
     @Column(name="ban_date")
     private String banDate = null;
 
-    public User(String username, String email, String password, ERole role) {
+    public User(String username, String email, String password, ERole role, Boolean isBanned, String banDate) {
         super();
         this.username = username;
         this.firstName = email;
         this.password = password;
         this.role = role;
+        this.isBanned = isBanned;
+        this.banDate = banDate;
     }
 
     @Override
