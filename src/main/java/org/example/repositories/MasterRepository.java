@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface MasterRepository extends JpaRepository<Master, Long> {
-    @Query(value = "select m from Master m")
+    @Query("select m from Master m")
     Page<Master> findAllMastersPage(Pageable pageable);
 
     Optional<Master> findByEmail(String email);
