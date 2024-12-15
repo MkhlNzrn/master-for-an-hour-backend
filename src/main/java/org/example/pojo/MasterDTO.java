@@ -3,6 +3,7 @@ package org.example.pojo;
 import lombok.Builder;
 import lombok.Data;
 import org.example.entities.Document;
+import org.example.entities.User;
 
 import java.util.List;
 
@@ -40,5 +41,5 @@ public class MasterDTO {
 
     private List<String> categories;
 
-    private Long userId;
+    private User userId;
 }

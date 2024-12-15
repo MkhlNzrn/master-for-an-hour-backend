@@ -174,7 +174,7 @@ public class MasterServiceImpl implements MasterService {
                 .isAccepted(master.getIsAccepted())
                 .categories(convertCategoriesToString(master.getCategories()))
                 .documents(documentRepository.findByMaster(master))
-                .userId(master.getUser().getId())
+                .userId(master.getUser())
                 .build();
     }
 

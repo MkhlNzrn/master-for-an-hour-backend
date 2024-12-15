@@ -7,7 +7,6 @@ import org.example.exceptions.BidNotFoundException;
 import org.example.exceptions.ClientNotFoundException;
 import org.example.exceptions.NoMastersFoundException;
 import org.example.exceptions.TaskNotFoundException;
-import org.example.pojo.MasterDTO;
 import org.example.pojo.SignUpRequest;
 import org.example.repositories.BidRepository;
 import org.example.repositories.ClientRepository;
