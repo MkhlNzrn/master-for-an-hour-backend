@@ -175,6 +175,8 @@ public class MasterServiceImpl implements MasterService {
                 .categories(convertCategoriesToString(master.getCategories()))
                 .documents(documentRepository.findByMaster(master))
                 .userId(master.getUser())
+                .isBanned(master.getUser().getIsBanned())
+                .banDate(master.getUser().getBanDate())
                 .build();
     }
 

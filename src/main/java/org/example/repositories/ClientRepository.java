@@ -19,6 +19,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Query(value = "select * from clients where user_id = ?1", nativeQuery = true)
     Optional<Client> findByUserId(Long id);
 
-    @Query("SELECT c FROM Client c")
+    @Query("select c from Client c")
     Page<Client> findAllClientsPage(Pageable pageable);
 }

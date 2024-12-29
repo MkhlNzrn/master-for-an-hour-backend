@@ -42,4 +42,8 @@ public class MasterDTO {
     private List<String> categories;
 
     private User userId;
+
+    private Boolean isBanned;
+
+    private String banDate;
 }

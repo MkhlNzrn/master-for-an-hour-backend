@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="IU-242.22855.74">
-    <data-source name="master-for-an-hour-local@localhost" uuid="4f748862-9a4c-4974-b597-440874509892">
+    <data-source name="postgres@89.23.117.193" uuid="0c09be20-c941-4f5c-9d67-4a88d14d23d9">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
-      <schema-mapping />
-    </data-source>
-    <data-source name="postgres@195.133.197.53" uuid="6dcdff6a-355a-468f-8323-2a21d56570cc">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>master_user</user-name>
       <schema-mapping />
     </data-source>
   </component>
