@@ -3,6 +3,7 @@ package org.example.services;
 import org.example.entities.Bid;
 import org.example.entities.Client;
 import org.example.entities.User;
+import org.example.pojo.ClientDTO;
 import org.example.pojo.SignUpRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,5 +21,5 @@ public interface ClientService {
 
      List<Bid> getAllBids(Long id);
 
-     Page<Client> getAllClients(Pageable pageable);
+     Page<ClientDTO> getAllClients(Pageable pageable);
 }

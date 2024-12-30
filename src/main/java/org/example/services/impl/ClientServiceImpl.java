@@ -7,6 +7,8 @@ import org.example.exceptions.BidNotFoundException;
 import org.example.exceptions.ClientNotFoundException;
 import org.example.exceptions.NoMastersFoundException;
 import org.example.exceptions.TaskNotFoundException;
+import org.example.pojo.ClientDTO;
+import org.example.pojo.MasterDTO;
 import org.example.pojo.SignUpRequest;
 import org.example.repositories.BidRepository;
 import org.example.repositories.ClientRepository;
@@ -40,10 +42,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Page<Client> getAllClients(Pageable pageable) {
+    public Page<ClientDTO> getAllClients(Pageable pageable) {
         Page<Client> clients = clientRepository.findAllClientsPage(pageable);
         if (clients.isEmpty()) throw new NoMastersFoundException();
-        return clients;
+        return clients.map(this::convertToDTO);
     }
 
     @Override
@@ -68,5 +70,15 @@ public class ClientServiceImpl implements ClientService {
     public List<Bid> getAllBids(Long taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
         return bidRepository.findAllByTask(task);
+    }
+
+    private ClientDTO convertToDTO(Client client) {
+        return ClientDTO.builder()
+                .id(client.getId())
+                .name(client.getName())
+                .email(client.getEmail())
+                .phoneNumber(client.getPhoneNumber())
+                .telegramTag(client.getTelegramTag())
+                .build();
     }
 }

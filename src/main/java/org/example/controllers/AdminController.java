@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.entities.Client;
 import org.example.entities.Master;
 import org.example.exceptions.NoMasterAccessRequestsException;
-import org.example.pojo.ChangeProfileDTO;
-import org.example.pojo.MasterDTO;
-import org.example.pojo.TaskDTO;
-import org.example.pojo.UpdateTaskDTO;
+import org.example.pojo.*;
 import org.example.repositories.MasterRepository;
 import org.example.services.*;
 import org.springframework.data.domain.Page;
@@ -68,8 +65,8 @@ public class AdminController {
 
     @Operation(description = "Get an information about all Clients")
     @GetMapping("/clients")
-    public ResponseEntity<Page<Client>> getAllClients(@RequestParam(defaultValue = "0") int page,
-                                                      @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<ClientDTO>> getAllClients(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return ResponseEntity.ok(clientService.getAllClients(pageRequest));
     }
