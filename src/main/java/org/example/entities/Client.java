@@ -25,7 +25,7 @@ public class Client {
     @Column(name = "telegram_tag")
     private String telegramTag;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
