@@ -19,6 +19,6 @@ public class ClientDTO {
 
     private String telegramTag;
 
-    private User user;
+    private User userId;
 
 }

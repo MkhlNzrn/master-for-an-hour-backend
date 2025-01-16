@@ -79,6 +79,7 @@ public class ClientServiceImpl implements ClientService {
                 .email(client.getEmail())
                 .phoneNumber(client.getPhoneNumber())
                 .telegramTag(client.getTelegramTag())
+                .userId(client.getUser())
                 .build();
     }
 }
