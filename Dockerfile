@@ -13,6 +13,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/master-for-an-hour-backend-1.0-SNAPSHOT.jar app.jar
 
-EXPOSE 8081
+EXPOSE 8000
 
 CMD ["java", "-jar", "app.jar"]

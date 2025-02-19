@@ -9,7 +9,7 @@ docker stop master_for_an_hour_backend_container
 docker rm master_for_an_hour_backend_container
 
 docker run -d --name master_for_an_hour_backend_container \
-   -p 8081:8081 \
+   -p 8000:8000 \
    -v /root/media:/root/media \
    master-for-an-hour-backend-6-image
 
