@@ -41,6 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .firstName(request.getFirstName())
                 .password(passwordEncoder.encode(request
                         .getPassword())).role(ERole.valueOf(request.getRole()))
+                .isBanned(false)
                 .build();
 
         userService.create(user);

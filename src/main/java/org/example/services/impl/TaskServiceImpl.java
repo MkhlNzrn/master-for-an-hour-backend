@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ import java.util.Optional;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
-
+    private final BidRepository bidRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
@@ -56,7 +57,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public Long deleteTask(Long id) {
+        if (bidRepository.existsByTaskId(id)) {
+            bidRepository.deleteAllByTaskId(id);
+        }
         taskRepository.deleteById(id);
         return id;
     }
